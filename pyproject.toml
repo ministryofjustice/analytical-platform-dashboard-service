@@ -1,0 +1,19 @@
+[project]
+name = "analytical-platform-dashboard-service"
+version = "0.1.0"
+description = "Dashboard Service for Analytical Platform"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.1.7",
+    "psycopg[binary]>=3.2.6",
+]
+
+[dependency-groups]
+dev = [
+    "black>=25.1.0",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py313"]
