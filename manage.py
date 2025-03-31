@@ -3,10 +3,12 @@
 
 import os
 import sys
+import dotenv
 
 
-def main(foo: list):
+def main():
     """Run administrative tasks."""
+    dotenv.load_dotenv()
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dashboard_service.settings.local")
     try:
         from django.core.management import execute_from_command_line
