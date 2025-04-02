@@ -41,7 +41,7 @@ migrate *ARGS:
 
 # Run the django server
 runserver:
-    uv run python manage.py runserver
+    uv run python manage.py runserver 8001
 
 # Delete the .venv and drop the DB
 destroy:
