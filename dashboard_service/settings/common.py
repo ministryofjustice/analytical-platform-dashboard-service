@@ -136,3 +136,24 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom user model
 AUTH_USER_MODEL = "users.User"
+
+LOGIN_URL = "login"
+
+# Auth0 settings
+AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
+AUTH0_CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID")
+AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
+AUTH0_LOGOUT_URL = f"https://{AUTH0_DOMAIN}/v2/logout"
+
+# Authlib
+AUTHLIB_OAUTH_CLIENTS = {
+    "auth0": {
+        "client_id": AUTH0_CLIENT_ID,
+        "client_secret": AUTH0_CLIENT_SECRET,
+        "client_kwargs": {
+            "scope": "openid profile email",
+        },
+        "server_metadata_url": f"https://{AUTH0_DOMAIN}/.well-known/openid-configuration",
+        "authorize_params": {"isPasswordlessFlow": True},  # required to trigger passwordless login
+    }
+}
