@@ -40,4 +40,5 @@ def logout(request):
             "client_id": settings.AUTH0_CLIENT_ID,
         }
     )
-    return redirect(f"{settings.AUTH0_LOGOUT_URL}?{params}")
+    url = f"https://{settings.AUTH0_DOMAIN}/v2/logout"
+    return redirect(f"{url}?{params}")

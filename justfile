@@ -47,3 +47,6 @@ runserver:
 destroy:
     rm -rf .venv/
     dropdb --if-exists {{ db_name }}
+
+test:
+    pytest . --failed-first
