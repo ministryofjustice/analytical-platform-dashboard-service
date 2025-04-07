@@ -22,8 +22,8 @@ def login(request):
 def callback(request):
     token = oauth.auth0.authorize_access_token(request)
     userinfo = token["userinfo"]
-    # with the email connection we dont get much info back about the user
-    # currently using the nickname field as the username to match Control Panel, but might want to
+    # with the email connection we dont get much info back about the user.
+    # the nickname field is used as the username to match Control Panel, could
     # change this to the email field since we are using the email connection
     user, _ = User.objects.get_or_create(
         username=userinfo["nickname"], defaults={"email": userinfo["email"]}
