@@ -143,7 +143,7 @@ LOGIN_URL = "login"
 AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
 AUTH0_CLIENT_ID = os.environ.get("AUTH0_CLIENT_ID")
 AUTH0_CLIENT_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
-
+AUTH0_AUDIENCE = os.environ.get("AUTH0_AUDIENCE")
 # Authlib
 AUTHLIB_OAUTH_CLIENTS = {
     "auth0": {
@@ -156,3 +156,6 @@ AUTHLIB_OAUTH_CLIENTS = {
         "authorize_params": {"isPasswordlessFlow": True},  # required to trigger passwordless login
     }
 }
+
+# Control Panel API settings
+CONTROL_PANEL_API_URL = os.environ.get("CONTROL_PANEL_API_URL")
