@@ -19,9 +19,14 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
 
+from dashboard_service import views
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("dashboard_service.dashboards.urls", namespace="dashboards")),
+    path("login/", views.login, name="login"),
+    path("logout/", views.logout, name="logout"),
+    path("callback/", views.callback, name="callback"),
 ]
 
 
