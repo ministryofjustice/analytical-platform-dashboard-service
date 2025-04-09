@@ -2,6 +2,7 @@ from authlib.integrations.django_client import OAuth
 from django.conf import settings
 from django.contrib.auth import login as _login
 from django.contrib.auth import logout as _logout
+from django.contrib.auth.decorators import login_not_required
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.http import urlencode
@@ -14,11 +15,26 @@ oauth.register(
 )
 
 
+# TODO add frontpage view e.g. with login button
+@login_not_required
+def index(request):
+    """
+    Index view for the dashboard service.
+    """
+    if request.user.is_authenticated:
+        return redirect(reverse("dashboards:index"))
+    return redirect(reverse("login"))
+
+
+@login_not_required
 def login(request):
+    if request.user.is_authenticated:
+        return redirect(reverse("dashboards:index"))
     redirect_uri = request.build_absolute_uri(reverse("callback"))
     return oauth.auth0.authorize_redirect(request, redirect_uri)
 
 
+@login_not_required
 def callback(request):
     token = oauth.auth0.authorize_access_token(request)
     userinfo = token["userinfo"]
@@ -36,7 +52,7 @@ def logout(request):
     _logout(request)
     params = urlencode(
         {
-            "returnTo": request.build_absolute_uri(reverse("dashboards:index")),
+            "returnTo": request.build_absolute_uri(reverse("index")),
             "client_id": settings.AUTH0_CLIENT_ID,
         }
     )
