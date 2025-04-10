@@ -1,11 +1,14 @@
 from unittest.mock import Mock, patch
 
+from django.contrib.auth.models import AnonymousUser
+
 from dashboard_service.views import callback, login, logout
 
 
 @patch("dashboard_service.views.reverse", return_value="/callback/")
 def test_login_calls_authorize_redirect_correctly(mock_reverse, mock_auth0, rf):
     request = rf.get("/login/")
+    request.user = AnonymousUser()
     expected_redirect_uri = "http://testserver/callback/"
     request.build_absolute_uri = Mock(return_value=expected_redirect_uri)
 
@@ -33,7 +36,7 @@ def test_callback_authenticates_and_redirects(mock_get_or_create, mock_login, rf
     )
     mock_login.assert_called_once_with(request, user=user)
     assert response.status_code == 302
-    assert response.url == "/"
+    assert response.url == "/dashboards/"
 
 
 @patch("dashboard_service.views.urlencode")

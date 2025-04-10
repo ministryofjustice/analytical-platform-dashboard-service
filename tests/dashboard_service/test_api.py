@@ -99,4 +99,5 @@ def test_make_request(endpoint, method, params, api_client, mock_requests):
             method,
             f"{api_client.base_url}{endpoint}",
             headers={"Authorization": f"Bearer {api_client.access_token}"},
+            **params,
         )
