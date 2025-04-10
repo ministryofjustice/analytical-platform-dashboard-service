@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Dashboard {{dashboard.name }}</h1>
+
+    <iframe
+        width="960"
+        height="720"
+        src="{{ dashboard.embed_url }}">
+    </iframe>
+
+{% endblock content %}
