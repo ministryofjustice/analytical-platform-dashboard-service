@@ -1,12 +1,11 @@
 import requests
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.views.generic import TemplateView
 
 from dashboard_service.dashboards.api import api_client
 
 
-class IndexView(LoginRequiredMixin, TemplateView):
+class IndexView(TemplateView):
     """
     Index view for the dashboard service.
     """
@@ -21,7 +20,7 @@ class IndexView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class DetailView(LoginRequiredMixin, TemplateView):
+class DetailView(TemplateView):
     template_name = "dashboards/detail.html"
 
     def get_context_data(self, **kwargs):
