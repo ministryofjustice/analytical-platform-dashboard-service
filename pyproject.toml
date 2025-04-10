@@ -43,3 +43,5 @@ select = [
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "dashboard_service.settings.test"
+addopts = "-v --tb=auto"
+testpaths = ["tests"]

@@ -49,4 +49,4 @@ destroy:
     dropdb --if-exists {{ db_name }}
 
 test *ARGS:
-    pytest . --failed-first {{ ARGS}}
+    pytest . --failed-first --maxfail=5 {{ ARGS }}
