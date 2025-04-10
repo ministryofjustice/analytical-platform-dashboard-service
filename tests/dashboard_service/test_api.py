@@ -4,8 +4,6 @@ from unittest.mock import MagicMock, patch
 import pytest
 from django.conf import settings
 
-# from dashboard_service.dashboards.api import api_client
-
 
 def test_get_access_token(api_client, mock_requests):
     """

@@ -27,7 +27,8 @@ class DetailView(TemplateView):
         context = super().get_context_data(**kwargs)
         try:
             context["dashboard"] = api_client.make_request(
-                f"dashboards/{kwargs['quicksight_id']}", params={"email": self.request.user.email}
+                f"dashboards/{self.kwargs['quicksight_id']}",
+                params={"email": self.request.user.email},
             )
         except requests.exceptions.HTTPError as e:
             raise Http404() from e
