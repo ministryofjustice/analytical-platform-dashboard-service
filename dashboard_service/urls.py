@@ -22,11 +22,12 @@ from django.urls import include, path
 from dashboard_service import views
 
 urlpatterns = [
+    path("", views.index, name="index"),
     path("admin/", admin.site.urls),
-    path("", include("dashboard_service.dashboards.urls", namespace="dashboards")),
     path("login/", views.login, name="login"),
-    path("logout/", views.logout, name="logout"),
     path("callback/", views.callback, name="callback"),
+    path("logout/", views.logout, name="logout"),
+    path("dashboards/", include("dashboard_service.dashboards.urls", namespace="dashboards")),
 ]
 
 

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block body_attributes %}onload="embedDashboard()"{% endblock body_attributes %}
+
+{% block title %}Analytical Platform Dashboard Service{% endblock title %}
+
+{% block content %}
+    <h1>Dashboard {{dashboard.name }}</h1>
+
+    <p>Admins: {{ dashboard.admins }}</p>
+
+    <body onload="embedDashboard()">
+        <div id="experience-container"></div>
+    </body>
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src="https://unpkg.com/amazon-quicksight-embedding-sdk@2.10.0/dist/quicksight-embedding-js-sdk.min.js"></script>
+    <script type="text/javascript">
+        const embedDashboard = async() => {
+            const {
+                createEmbeddingContext,
+            } = QuickSightEmbedding;
+
+            const embeddingContext = await createEmbeddingContext({
+                onChange: (changeEvent, metadata) => {
+                    console.log('Context received a change', changeEvent, metadata);
+                },
+            });
+
+            const frameOptions = {
+                url: '{{ dashboard.embed_url|safe }}',
+                container: '#experience-container',
+                height: window.screen.availHeight * 0.80,
+                width: "100%",
+                onChange: (changeEvent, metadata) => {
+                    switch (changeEvent.eventName) {
+                        case 'FRAME_MOUNTED': {
+                            console.log("Do something when the experience frame is mounted.");
+                            break;
+                        }
+                        case 'FRAME_LOADED': {
+                            console.log("Do something when the experience frame is loaded.");
+                            break;
+                        }
+                    }
+                },
+            };
+
+            const contentOptions = {
+                locale: "en-GB",
+                toolbarOptions: {
+                    export: true,
+                    undoRedo: true,
+                    reset: true
+                },
+                attributionOptions: {
+                    overlayContent: false,
+                },
+                onMessage: async (messageEvent, experienceMetadata) => {
+                    switch (messageEvent.eventName) {
+                        case 'CONTENT_LOADED': {
+                            console.log("All visuals are loaded. The title of the document:", messageEvent.message.title);
+                            break;
+                        }
+                        case 'ERROR_OCCURRED': {
+                            console.log("Error occurred while rendering the experience. Error code:", messageEvent.message.errorCode);
+                            break;
+                        }
+                        case 'PARAMETERS_CHANGED': {
+                            console.log("Parameters changed. Changed parameters:", messageEvent.message.changedParameters);
+                            break;
+                        }
+                        case 'SELECTED_SHEET_CHANGED': {
+                            console.log("Selected sheet changed. Selected sheet:", messageEvent.message.selectedSheet);
+                            break;
+                        }
+                        case 'SIZE_CHANGED': {
+                            console.log("Size changed. New dimensions:", messageEvent.message);
+                            break;
+                        }
+                        case 'MODAL_OPENED': {
+                            window.scrollTo({
+                                top: 0 // iframe top position
+                            });
+                            break;
+                        }
+                    }
+                },
+            };
+            const embeddedDashboardExperience = await embeddingContext.embedDashboard(frameOptions, contentOptions);
+        };
+    </script>
+
+{% endblock scripts %}

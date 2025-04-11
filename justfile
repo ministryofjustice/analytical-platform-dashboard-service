@@ -48,5 +48,5 @@ destroy:
     rm -rf .venv/
     dropdb --if-exists {{ db_name }}
 
-test:
-    pytest . --failed-first
+test *ARGS:
+    pytest . --failed-first --maxfail=5 {{ ARGS }}

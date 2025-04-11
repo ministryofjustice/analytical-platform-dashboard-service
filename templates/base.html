@@ -3,5 +3,10 @@
 
 {% block title %}Analytical Platform Dashboard Service{% endblock title %}
 
-{% block content %}
-{% endblock content %}
+<body class="govuk-template__body govuk-frontend-supported" {% block body_attributes %}{% endblock body_attributes %}>
+    {% block content %}
+    {% endblock content %}
+
+    {% block scripts %}
+    {% endblock scripts %}
+</body>
