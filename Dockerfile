@@ -1,17 +1,15 @@
-FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a as build
+FROM public.ecr.aws/docker/library/python:3.13-slim-bookworm@sha256:21e39cf1815802d4c6f89a0d3a166cc67ce58f95b6d1639e68a394c99310d2e5 as build
 
 SHELL ["sh", "-exc"]
 
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN <<EOT
-apt-get update -qy
-apt-get install -qyy \
+apt-get update --quiet --yes
+apt-get install --quiet --yes \
     -o APT::Install-Recommends=false \
     -o APT::Install-Suggests=false \
-    ca-certificates \
-    python3-setuptools \
-    python3.12-dev
+    ca-certificates
 EOT
 
 COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /usr/local/bin/uv
@@ -19,12 +17,10 @@ COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /usr/local/bin/uv
 # - Silence uv complaining about not being able to use hard links,
 # - tell uv to byte-compile packages for faster application startups,
 # - prevent uv from accidentally downloading isolated Python builds,
-# - pick a Python (use `/usr/bin/python3.12` on uv 0.5.0 and later),
 # - and finally declare `/app` as the target for `uv sync`.
 ENV UV_LINK_MODE=copy \
     UV_COMPILE_BYTECODE=1 \
     UV_PYTHON_DOWNLOADS=never \
-    UV_PYTHON=/usr/bin/python3.12 \
     UV_PROJECT_ENVIRONMENT=/app
 
 
@@ -47,11 +43,11 @@ RUN --mount=type=cache,target=/root/.cache \
 
 ##########################################################################
 
-FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a
+FROM public.ecr.aws/docker/library/python:3.13-slim-bookworm@sha256:21e39cf1815802d4c6f89a0d3a166cc67ce58f95b6d1639e68a394c99310d2e5
 
 SHELL ["sh", "-exc"]
 
-# Optional: add the application virtualenv to search path.
+# Add the application virtualenv to search path.
 ENV PATH=/app/bin:$PATH
 
 # Don't run your app as root.
@@ -66,15 +62,11 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 STOPSIGNAL SIGINT
 
 RUN <<EOT
-apt-get update -qy
-apt-get install -qyy \
+apt-get update --quiet --yes
+apt-get install --quiet --yes \
     -o APT::Install-Recommends=false \
     -o APT::Install-Suggests=false \
-    python3.12 \
-    libpython3.12 \
-    libpcre3 \
-    libxml2
-
+    ca-certificates
 apt-get clean
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOT
@@ -93,10 +85,9 @@ COPY tests /app/tests
 USER app
 WORKDIR /app
 
-# Strictly optional, but I like it for introspection of what I've built
-# and run a smoke test that the application can, in fact, be imported.
+# Run a smoke tests
 RUN <<EOT
 python -V
 python -Im site
-python -c 'import dashboard_service'
+python manage.py check --deploy
 EOT
