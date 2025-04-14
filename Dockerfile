@@ -9,7 +9,6 @@ apt-get update -qy
 apt-get install -qyy \
     -o APT::Install-Recommends=false \
     -o APT::Install-Suggests=false \
-    build-essential \
     ca-certificates \
     python3-setuptools \
     python3.12-dev
