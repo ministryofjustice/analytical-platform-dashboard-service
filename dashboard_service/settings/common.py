@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import contextlib
 import os
 from pathlib import Path
+from socket import gaierror, gethostbyname, gethostname
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -24,9 +26,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
+
+try:
+    ALLOWED_HOSTS.append(gethostbyname(gethostname()))
+except gaierror:
+    contextlib.suppress(gaierror)
 
 # Application definition
 
