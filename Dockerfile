@@ -1,6 +1,7 @@
-FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a as build
+FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a AS build
 
-SHELL ["sh", "-exc"]
+
+SHELL ["/bin/bash", "-e", "-u", "-o", "pipefail", "-c", "-x"]
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -9,8 +10,8 @@ apt-get update --quiet --yes
 apt-get install --quiet --yes \
     -o APT::Install-Recommends=false \
     -o APT::Install-Suggests=false \
-    python3.12-dev \
-    ca-certificates
+    "python3.12-dev=3.12.3-1ubuntu0.5" \
+    "ca-certificates=20240203"
 EOF
 
 # Install uv
@@ -39,7 +40,13 @@ RUN --mount=type=cache,target=/root/.cache \
 
 ##########################################################################
 
-FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a as runtime
+FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a AS runtime
+
+LABEL org.opencontainers.image.vendor="Ministry of Justice" \
+      org.opencontainers.image.authors="Analytical Platform (analytical-platform@digital.justice.gov.uk)" \
+      org.opencontainers.image.title="Dashboard Service" \
+      org.opencontainers.image.description="Dashboard Service image for Analytical Platform" \
+      org.opencontainers.image.url="https://github.com/ministryofjustice/analytical-platform-dashboard-service"
 
 SHELL ["sh", "-exc"]
 
@@ -52,8 +59,8 @@ ENV CONTAINER_USER="analyticalplatform" \
     CONTAINER_UID="1000" \
     CONTAINER_GROUP="analyticalplatform" \
     CONTAINER_GID="1000" \
-    DEBIAN_FRONTEND="noninteractive"
-
+    DEBIAN_FRONTEND="noninteractive" \
+    APP_ROOT="/app"
 
 RUN <<EOF
 userdel --remove --force ubuntu
@@ -81,9 +88,9 @@ apt-get update --quiet --yes
 apt-get install --quiet --yes \
     -o APT::Install-Recommends=false \
     -o APT::Install-Suggests=false \
-    python3.12 \
-    ca-certificates
-apt-get clean
+    "python3.12-dev=3.12.3-1ubuntu0.5" \
+    "ca-certificates=20240203"
+apt-get clean --yes
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOF
 
@@ -91,16 +98,16 @@ COPY docker-entrypoint.sh /
 
 # Copy the pre-built `/app` directory to the runtime container
 # and change the ownership to user app and group app in one step.
-COPY --from=build --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /app /app
+COPY --from=build --chown=${CONTAINER_USER}:${CONTAINER_GROUP} ${APP_ROOT} ${APP_ROOT}
 
-COPY manage.py /app/manage.py
-COPY dashboard_service /app/dashboard_service
-COPY templates /app/templates
-COPY tests /app/tests
-COPY pyproject.toml /app/pyproject.toml
+COPY manage.py ${APP_ROOT}/manage.py
+COPY dashboard_service ${APP_ROOT}/dashboard_service
+COPY templates ${APP_ROOT}/templates
+COPY tests ${APP_ROOT}/tests
+COPY pyproject.toml ${APP_ROOT}/pyproject.toml
 
 USER ${CONTAINER_USER}
-WORKDIR /app
+WORKDIR ${APP_ROOT}
 
 # Run a smoke tests
 RUN <<EOF
