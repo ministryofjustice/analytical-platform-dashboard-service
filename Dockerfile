@@ -84,6 +84,7 @@ COPY manage.py /app/manage.py
 COPY dashboard_service /app/dashboard_service
 COPY templates /app/templates
 COPY tests /app/tests
+COPY pyproject.toml /app/pyproject.toml
 
 USER app
 WORKDIR /app
