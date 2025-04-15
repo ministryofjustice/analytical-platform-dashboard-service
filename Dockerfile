@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/python:3.13-slim-bookworm@sha256:21e39cf1815802d4c6f89a0d3a166cc67ce58f95b6d1639e68a394c99310d2e5 as build
+FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a as build
 
 SHELL ["sh", "-exc"]
 
@@ -9,6 +9,7 @@ apt-get update --quiet --yes
 apt-get install --quiet --yes \
     -o APT::Install-Recommends=false \
     -o APT::Install-Suggests=false \
+    python3.12-dev \
     ca-certificates
 EOT
 
@@ -21,6 +22,7 @@ COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_COMPILE_BYTECODE=1 \
     UV_PYTHON_DOWNLOADS=never \
+    UV_PYTHON=/usr/bin/python3.12 \
     UV_PROJECT_ENVIRONMENT=/app
 
 
@@ -43,7 +45,7 @@ RUN --mount=type=cache,target=/root/.cache \
 
 ##########################################################################
 
-FROM public.ecr.aws/docker/library/python:3.13-slim-bookworm@sha256:21e39cf1815802d4c6f89a0d3a166cc67ce58f95b6d1639e68a394c99310d2e5
+FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a as runtime
 
 SHELL ["sh", "-exc"]
 
@@ -66,6 +68,7 @@ apt-get update --quiet --yes
 apt-get install --quiet --yes \
     -o APT::Install-Recommends=false \
     -o APT::Install-Suggests=false \
+    python3.12 \
     ca-certificates
 apt-get clean
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
