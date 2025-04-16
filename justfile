@@ -24,27 +24,14 @@ develop: install
 
 # Build css
 build-css:
-    rm -rf static/assets/fonts
-    rm -rf static/assets/images
-    rm -rf static/assets/css
     mkdir -p static/assets/fonts
     mkdir -p static/assets/images
-    mkdir -p static/assets/css
     cp -R node_modules/govuk-frontend/dist/govuk/assets/fonts/. static/assets/fonts
     cp -R node_modules/govuk-frontend/dist/govuk/assets/images/. static/assets/images
-    cp -R node_modules/@ministryofjustice/frontend/moj/assets/images/. static/assets/images
     npm run css
 
-build-js:
-    rm -rf static/assets/js
-    mkdir -p static/assets/js
-    cp node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js static/assets/js/govuk-frontend.min.js
-
 build-static:
-    npm install
-    rm -rf static/
     just build-css
-    just build-js
 
 # Lint and format with ruff
 lint:
