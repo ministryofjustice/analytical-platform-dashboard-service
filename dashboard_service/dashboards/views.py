@@ -14,9 +14,9 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context["dashboards"] = api_client.make_request(
-        #     "dashboards", params={"email": self.request.user.email}
-        # )["results"]
+        context["dashboards"] = api_client.make_request(
+            "dashboards", params={"email": self.request.user.email}
+        )["results"]
         return context
 
 
@@ -33,9 +33,8 @@ class DetailView(TemplateView):
                 timeout=5,
             )
         except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 404:
-                raise Http404("Dashboard not found") from e
-            raise e
+            raise Http404() from e
+
         context["dashboard"] = dashboard_data
         context["dashboard_admins"] = ", ".join(
             [admin["email"] for admin in dashboard_data["admins"]]
