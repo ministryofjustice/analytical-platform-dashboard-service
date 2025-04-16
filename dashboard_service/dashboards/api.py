@@ -74,8 +74,9 @@ class ControlPanelApiClient:
         headers["Authorization"] = f"Bearer {token}"
         kwargs["headers"] = headers
         url = f"{self.base_url}{endpoint}"
+        timeout = kwargs.pop("timeout", 3)
 
-        response = requests.request(method, url, timeout=1, **kwargs)
+        response = requests.request(method, url, timeout=timeout, **kwargs)
         response.raise_for_status()
         return response.json()
 

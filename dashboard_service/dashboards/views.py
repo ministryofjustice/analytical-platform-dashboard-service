@@ -14,9 +14,9 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context["dashboards"] = api_client.make_request(
-        #     "dashboards", params={"email": self.request.user.email}
-        # )["results"]
+        context["dashboards"] = api_client.make_request(
+            "dashboards", params={"email": self.request.user.email}
+        )["results"]
         return context
 
 
@@ -26,10 +26,16 @@ class DetailView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            context["dashboard"] = api_client.make_request(
+            dashboard_data = api_client.make_request(
                 f"dashboards/{self.kwargs['quicksight_id']}",
                 params={"email": self.request.user.email},
+                timeout=5,
             )
         except requests.exceptions.HTTPError as e:
             raise Http404() from e
+
+        context["dashboard"] = dashboard_data
+        context["dashboard_admins"] = ", ".join(
+            [admin["email"] for admin in dashboard_data["admins"]]
+        )
         return context
