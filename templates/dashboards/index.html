@@ -1,13 +1,14 @@
 {% extends "base/base.html" %}
 
 {% block content %}
-    <h1>Dashboard List</h1>
+<h1 class="govuk-heading-l">Dashboard List</h1>
 
-    <div>
-        {% for dashboard in dashboards %}
-            <p>{{ dashboard.name }}</p>
-            <p>{{ dashboard.admins }}</p>
-            <p><a href="{% url "dashboards:detail" quicksight_id=dashboard.quicksight_id %}">View dashboard</a></p>
-        {% endfor %}
-    </div>
+<div class="govuk-grid-row">
+  {% for dashboard in dashboards %}
+  <p class="govuk-body">{{ dashboard.name }}</p>
+  <p class="govuk-body">{{ dashboard.admins }}</p>
+  <p class="govuk-body"><a href="{% url "dashboards:detail" quicksight_id=dashboard.quicksight_id %}">View
+      dashboard</a></p>
+  {% endfor %}
+</div>
 {% endblock content %}
