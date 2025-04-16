@@ -10,9 +10,7 @@ env/
 terraform.tfstate
 __pycache__
 
-static/*
-!static/sass/
-!static/sass/app.scss
+static/
 staticfiles/
 
 node_modules/

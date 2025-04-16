@@ -75,7 +75,7 @@ class ControlPanelApiClient:
         kwargs["headers"] = headers
         url = f"{self.base_url}{endpoint}"
 
-        response = requests.request(method, url, **kwargs)
+        response = requests.request(method, url, timeout=1, **kwargs)
         response.raise_for_status()
         return response.json()
 

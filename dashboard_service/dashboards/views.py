@@ -14,9 +14,9 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["dashboards"] = api_client.make_request(
-            "dashboards", params={"email": self.request.user.email}
-        )["results"]
+        # context["dashboards"] = api_client.make_request(
+        #     "dashboards", params={"email": self.request.user.email}
+        # )["results"]
         return context
 
 
