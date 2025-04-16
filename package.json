@@ -1,0 +1,32 @@
+{
+  "name": "analytical-platform-dashboard-service",
+  "version": "1.0.0",
+  "description": "Dashboard Service for the Analytical Platform",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "amazon-quicksight-embedding-sdk": "2.10.0",
+    "govuk-frontend": "^5.9.0",
+    "punycode": "2.3.1",
+    "regenerator-runtime": "0.14.1",
+    "uuid": "9.0.1"
+  },
+  "devDependencies": {
+    "sass": "1.86.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "css": "sass --quiet-deps --load-path=./ --style=compressed static/sass/app.scss:static/app.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ministryofjustice/analytical-platform-dashboard-service.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ministryofjustice/analytical-platform-dashboard-service/issues"
+  },
+  "homepage": "https://github.com/ministryofjustice/analytical-platform-dashboard-service#readme"
+}

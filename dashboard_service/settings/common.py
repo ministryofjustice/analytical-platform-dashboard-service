@@ -134,6 +134,10 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+# The path to the directory where static files will be collected for deployment
+# https://docs.djangoproject.com/en/5.1/ref/settings/#static-root
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
 # Django looks in these locations for additional static assets to collect
 STATICFILES_DIRS = [BASE_DIR / "static"]
 

@@ -22,9 +22,16 @@ develop: install
     just migrate
     just runserver
 
-# Build static. TODO add the build steps!
+# Build css
+build-css:
+    mkdir -p static/assets/fonts
+    mkdir -p static/assets/images
+    cp -R node_modules/govuk-frontend/dist/govuk/assets/fonts/. static/assets/fonts
+    cp -R node_modules/govuk-frontend/dist/govuk/assets/images/. static/assets/images
+    npm run css
+
 build-static:
-    mkdir -p static
+    just build-css
 
 # Lint and format with ruff
 lint:

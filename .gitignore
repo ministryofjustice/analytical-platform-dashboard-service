@@ -9,5 +9,10 @@ env/
 *.sha256
 terraform.tfstate
 __pycache__
-static/
+
+static/*
+!static/sass/
+!static/sass/app.scss
+staticfiles/
+
 node_modules/
