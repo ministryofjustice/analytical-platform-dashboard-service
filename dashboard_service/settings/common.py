@@ -10,10 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-import contextlib
 import os
 from pathlib import Path
-from socket import gaierror, gethostbyname, gethostname
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -30,13 +28,9 @@ DEBUG = False
 
 ALLOWED_HOSTS = []
 
-try:
-    ALLOWED_HOSTS.append(gethostbyname(gethostname()))
-except gaierror:
-    contextlib.suppress(gaierror)
+APP_ENV = os.environ.get("DJANGO_ENV", "local")
 
 # Application definition
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -168,6 +162,22 @@ AUTHLIB_OAUTH_CLIENTS = {
         "authorize_params": {"isPasswordlessFlow": True},  # required to trigger passwordless login
     }
 }
+
+# -- Sentry error tracking
+
+if os.environ.get("SENTRY_DSN"):
+    # Third-party
+    import sentry_sdk
+    from sentry_sdk.integrations.django import DjangoIntegration
+
+    sentry_sdk.init(
+        dsn=os.environ["SENTRY_DSN"],
+        environment=APP_ENV,
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=0.0,
+        send_default_pii=True,
+    )
+
 
 # Control Panel API settings
 CONTROL_PANEL_API_URL = os.environ.get("CONTROL_PANEL_API_URL")
