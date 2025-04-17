@@ -33,8 +33,9 @@ class DetailView(TemplateView):
                 timeout=5,
             )
         except requests.exceptions.HTTPError as e:
-            raise Http404() from e
-
+            if e.response.status_code == 404:
+                raise Http404("Dashboard not found") from e
+            raise e
         context["dashboard"] = dashboard_data
         context["dashboard_admins"] = ", ".join(
             [admin["email"] for admin in dashboard_data["admins"]]
