@@ -14,7 +14,6 @@ dependencies = [
     "python-dotenv==1.1.0",
     "requests==2.32.3",
     "sentry-sdk==2.26.1",
-    "whitenoise==6.9.0",
 ]
 
 [dependency-groups]
