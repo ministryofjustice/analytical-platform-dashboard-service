@@ -16,6 +16,7 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "requests" },
     { name = "sentry-sdk" },
+    { name = "whitenoise" },
 ]
 
 [package.dev-dependencies]
@@ -37,6 +38,7 @@ requires-dist = [
     { name = "python-dotenv", specifier = "==1.1.0" },
     { name = "requests", specifier = "==2.32.3" },
     { name = "sentry-sdk", specifier = "==2.26.1" },
+    { name = "whitenoise", specifier = "==6.9.0" },
 ]
 
 [package.metadata.requires-dev]
