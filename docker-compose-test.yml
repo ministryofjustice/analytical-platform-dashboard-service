@@ -21,7 +21,7 @@ services:
       DB_USER: dashboard_service
       DEBUG: "True"
       DJANGO_SETTINGS_MODULE: "dashboard_service.settings.test"
-      ENV: "dev"
+      APP_ENV: "test"
       PYTHONUNBUFFERED: "1"
       SECRET_KEY: "1234567890"
       ENABLE_DB_SSL: "False"

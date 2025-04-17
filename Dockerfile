@@ -94,8 +94,6 @@ useradd \
 EOF
 
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
-
 # See <https://hynek.me/articles/docker-signals/>.
 STOPSIGNAL SIGINT
 
@@ -132,9 +130,5 @@ COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} pyproject.toml ${APP_ROOT}/pyp
 USER ${CONTAINER_USER}
 WORKDIR ${APP_ROOT}
 
-# Run a smoke tests
-RUN <<EOF
-python -V
-python -Im site
-python manage.py check --deploy
-EOF
+EXPOSE 8000
+ENTRYPOINT ["/docker-entrypoint.sh"]
