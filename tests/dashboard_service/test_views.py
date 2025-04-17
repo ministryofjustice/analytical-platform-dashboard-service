@@ -84,7 +84,8 @@ class TestDetailView:
         user.save()
         client.force_login(user)
         response = client.get(url)
-        # assert response.status_code == 200
+        assert response.status_code == 200
+        assert "dashboards/detail.html" in response.template_name
 
     def test_get_context_data(self, api_client, view_obj, user):
         view_obj.request.user = user
@@ -94,5 +95,7 @@ class TestDetailView:
 
         assert "dashboard" in context
         mock_make_request.assert_called_once_with(
-            f"dashboards/{view_obj.kwargs['quicksight_id']}", params={"email": user.email}
+            f"dashboards/{view_obj.kwargs['quicksight_id']}",
+            params={"email": user.email},
+            timeout=5,
         )
