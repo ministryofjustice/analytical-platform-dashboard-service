@@ -42,11 +42,10 @@ tolerations: []
 
 app:
   image:
-    repository: ghcr.io/ministryofjustice/analytical-platform-ui
+    repository: ghcr.io/ministryofjustice/analytical-platform-dashboard-service
     pullPolicy: IfNotPresent
     tag: ""
   environment:
-    # TODO this needs to be specified for each environment
     - name: APP_ENV
       value: development
     - name: DJANGO_SETTINGS_MODULE
