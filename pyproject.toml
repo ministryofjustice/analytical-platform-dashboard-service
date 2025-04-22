@@ -1,0 +1,48 @@
+[project]
+name = "analytical-platform-dashboard-service"
+version = "0.1.0"
+description = "Dashboard Service for Analytical Platform"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "authlib==1.5.2",
+    "django==5.1.7",
+    "django-extensions==3.2.3",
+    "gunicorn==23.0.0",
+    "psycopg[binary]==3.2.6",
+    "pytest-django>=4.11.1",
+    "python-dotenv==1.1.0",
+    "requests==2.32.3",
+]
+
+[dependency-groups]
+dev = [
+    "django-debug-toolbar==5.1.0",
+    "pre-commit==4.2.0",
+    "pytest>=8.3.5",
+    "ruff==0.11.2",
+]
+
+[tool.ruff]
+line-length = 99
+
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "dashboard_service.settings.test"
+addopts = "-v --tb=auto"
+testpaths = ["tests"]
