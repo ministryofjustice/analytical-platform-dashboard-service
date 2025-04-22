@@ -28,6 +28,7 @@ urlpatterns = [
     path("callback/", views.callback, name="callback"),
     path("logout/", views.logout, name="logout"),
     path("dashboards/", include("dashboard_service.dashboards.urls", namespace="dashboards")),
+    path("healthcheck/", views.healthcheck, name="healthcheck"),
 ]
 
 

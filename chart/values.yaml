@@ -27,14 +27,14 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-production-http01
   hosts:
-    - host: development.dashboards.analytical-platform.service.justice.gov.uk
+    - host: dashboards.development.analytical-platform.service.justice.gov.uk
       paths:
         - path: /
           pathType: ImplementationSpecific
   tls:
     - secretName: dashboard-service-tls
       hosts:
-        - development.dashboards.analytical-platform.service.justice.gov.uk
+        - dashboards.development.analytical-platform.service.justice.gov.uk
 
 affinity: {}
 nodeSelector: {}
