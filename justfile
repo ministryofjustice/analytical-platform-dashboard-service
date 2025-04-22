@@ -41,6 +41,7 @@ build-js:
     cp node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js static/assets/js/govuk-frontend.min.js
 
 build-static:
+    npm install
     rm -rf static/
     just build-css
     just build-js
