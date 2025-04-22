@@ -24,6 +24,10 @@ createdb dashboard_service
 
 ### Developer setup
 
+#### .env file
+
+You will need a `.env` file for local development - you can find this in 1Password, search for "Dashboard Service .env file for local development".
+
 #### Using the justfile
 
 Install `just` with brew, or an [alternative installation option](https://github.com/casey/just?tab=readme-ov-file#installation):
