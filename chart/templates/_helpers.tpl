@@ -49,3 +49,14 @@ Selector labels
 app.kubernetes.io/name: {{ include "analytical-platform-dashboard-service.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "analytical-platform-dashboard-service.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "analytical-platform-dashboard-service.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
+{{- end }}
