@@ -1,6 +1,6 @@
 # Analytical Platform Dashboard Service
 
- [![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/analytical-platform-dashboard-service/badge)](https://github-community.service.justice.gov.uk/repository-standards/analytical-platform-dashboard-service)
+[![Ministry of Justice Repository Compliance Badge](https://github-community.service.justice.gov.uk/repository-standards/api/analytical-platform-dashboard-service/badge)](https://github-community.service.justice.gov.uk/repository-standards/analytical-platform-dashboard-service)
 
 ## Setup Instructions
 
@@ -16,7 +16,7 @@ Or see the full installation instructions [here](https://docs.astral.sh/uv/getti
 
 ### Database for local development
 
-You will need postgresql installed and running, then create the database with:
+You will need PostgreSQL installed and running, then create the database with:
 
 ```sh
 createdb dashboard_service

@@ -3,7 +3,6 @@ ADDRESS=${ADDRESS:-"0.0.0.0"}
 PORT=${PORT:-"8000"}
 WORKERS=${WORKERS:-"4"}
 
-
 echo "Run django checks"
 python manage.py check --deploy
 
