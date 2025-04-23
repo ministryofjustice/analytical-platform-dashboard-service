@@ -1,17 +1,18 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 
 {% block body_attributes %}onload="embedDashboard()"{% endblock body_attributes %}
 
 {% block title %}Analytical Platform Dashboard Service{% endblock title %}
 
+{% block base_div_class %}govuk-grid-column-full{% endblock base_div_class %}
+
 {% block content %}
-    <h1>Dashboard {{dashboard.name }}</h1>
 
-    <p>Admins: {{ dashboard.admins }}</p>
+  <h1 class="govuk-heading-l">Dashboard: {{dashboard.name }}</h1>
+  <p class="govuk-body">Admins: {{ dashboard_admins }}</p>
 
-    <body onload="embedDashboard()">
-        <div id="experience-container"></div>
-    </body>
+  <div id="experience-container"></div>
+
 
 {% endblock content %}
 

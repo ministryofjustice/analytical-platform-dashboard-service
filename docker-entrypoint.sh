@@ -7,6 +7,9 @@ WORKERS=${WORKERS:-"4"}
 echo "Run django checks"
 python manage.py check --deploy
 
+echo "Collecting static files"
+python manage.py collectstatic --noinput
+
 echo "Migrating the database"
 python manage.py migrate --noinput
 

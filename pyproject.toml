@@ -13,6 +13,8 @@ dependencies = [
     "pytest-django>=4.11.1",
     "python-dotenv==1.1.0",
     "requests==2.32.3",
+    "sentry-sdk==2.26.1",
+    "whitenoise==6.9.0",
 ]
 
 [dependency-groups]
@@ -43,6 +45,5 @@ select = [
 ]
 
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "dashboard_service.settings.test"
-addopts = "-v --tb=auto"
+addopts = "-v --tb=auto --ds=dashboard_service.settings.test"
 testpaths = ["tests"]

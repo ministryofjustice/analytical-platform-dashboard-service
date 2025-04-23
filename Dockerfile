@@ -1,5 +1,6 @@
-FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a AS build
+##### BUILD PYTHON
 
+FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a AS build-python
 
 SHELL ["/bin/bash", "-e", "-u", "-o", "pipefail", "-c", "-x"]
 
@@ -38,7 +39,22 @@ RUN --mount=type=cache,target=/root/.cache \
         --no-dev \
         --no-install-project
 
-##########################################################################
+##### BUILD NODE
+
+FROM public.ecr.aws/docker/library/node:22.14.0 AS build-node
+
+WORKDIR /build
+
+COPY package.json package-lock.json ./
+COPY /scss/app.scss ./scss/app.scss
+
+RUN <<EOF
+npm install
+
+npm run css
+EOF
+
+##### FINAL
 
 FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a AS runtime
 
@@ -78,8 +94,6 @@ useradd \
 EOF
 
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
-
 # See <https://hynek.me/articles/docker-signals/>.
 STOPSIGNAL SIGINT
 
@@ -98,20 +112,23 @@ COPY docker-entrypoint.sh /
 
 # Copy the pre-built `/app` directory to the runtime container
 # and change the ownership to user app and group app in one step.
-COPY --from=build --chown=${CONTAINER_USER}:${CONTAINER_GROUP} ${APP_ROOT} ${APP_ROOT}
+COPY --from=build-python --chown=${CONTAINER_USER}:${CONTAINER_GROUP} ${APP_ROOT} ${APP_ROOT}
 
-COPY manage.py ${APP_ROOT}/manage.py
-COPY dashboard_service ${APP_ROOT}/dashboard_service
-COPY templates ${APP_ROOT}/templates
-COPY tests ${APP_ROOT}/tests
-COPY pyproject.toml ${APP_ROOT}/pyproject.toml
+# Copy compiled assets
+COPY --from=build-node --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /build/static/assets/css/app.css ${APP_ROOT}/static/assets/css/app.css
+COPY --from=build-node --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /build/node_modules/govuk-frontend/dist/govuk/assets/fonts/. ${APP_ROOT}/static/assets/fonts
+COPY --from=build-node --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /build/node_modules/govuk-frontend/dist/govuk/assets/images/. ${APP_ROOT}/static/assets/images
+COPY --from=build-node --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /build/node_modules/govuk-frontend/dist/govuk/all.bundle.js ${APP_ROOT}/static/assets/js/govuk.js
+COPY --from=build-node --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /build/node_modules/@ministryofjustice/frontend/moj/assets/images/. ${APP_ROOT}/static/assets/images
+
+COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} manage.py ${APP_ROOT}/manage.py
+COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} dashboard_service ${APP_ROOT}/dashboard_service
+COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} templates ${APP_ROOT}/templates
+COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} tests ${APP_ROOT}/tests
+COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} pyproject.toml ${APP_ROOT}/pyproject.toml
 
 USER ${CONTAINER_USER}
 WORKDIR ${APP_ROOT}
 
-# Run a smoke tests
-RUN <<EOF
-python -V
-python -Im site
-python manage.py check --deploy
-EOF
+EXPOSE 8000
+ENTRYPOINT ["/docker-entrypoint.sh"]

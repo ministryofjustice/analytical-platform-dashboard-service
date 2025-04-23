@@ -1,13 +1,42 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 
 {% block content %}
-    <h1>Dashboard List</h1>
+<div class="govuk-grid-row">
+  <div class="govuk-width-container">
 
-    <div>
+    <h1 class="govuk-heading-l">Dashboard List</h1>
+
+    <table class="govuk-table">
+      <caption class="govuk-table__caption govuk-table__caption--m">Dashboards you can access</caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Name</th>
+          <th scope="col" class="govuk-table__header">Admins</th>
+          <th scope="col" class="govuk-table__header">Action</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
         {% for dashboard in dashboards %}
-            <p>{{ dashboard.name }}</p>
-            <p>{{ dashboard.admins }}</p>
-            <p><a href="{% url "dashboards:detail" quicksight_id=dashboard.quicksight_id %}">View dashboard</a></p>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header">{{ dashboard.name }}</th>
+            <td class="govuk-table__cell">{% for admin in dashboard.admins %}{{admin.email}}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+            <td class="govuk-table__cell"><a href="{% url "dashboards:detail" quicksight_id=dashboard.quicksight_id %}">View dashboard</a></td>
+          </tr>
         {% endfor %}
-    </div>
+      </tbody>
+    </table>
+
+
+
+
+    <!-- <ul class="govuk-list">
+
+    {% for dashboard in dashboards %}
+      <li>
+        <a href="{% url "dashboards:detail" quicksight_id=dashboard.quicksight_id %}">{{ dashboard.name }}</a>
+      </li>
+    {% endfor %}
+    </ul> -->
+  </div>
+</div>
 {% endblock content %}

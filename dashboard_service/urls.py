@@ -31,7 +31,7 @@ urlpatterns = [
 ]
 
 
-if settings.DEBUG:
+if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:
     # Third-party
     from debug_toolbar.toolbar import debug_toolbar_urls  # noqa
 
