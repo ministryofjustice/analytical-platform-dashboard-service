@@ -9,7 +9,7 @@ serviceAccount:
   create: true
   automount: true
   annotations: {}
-  name: "analytical-platform-dashboard-service"
+  name: "dashboard-service"
 
 podAnnotations: {}
 podLabels: {}

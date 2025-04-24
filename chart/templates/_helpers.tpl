@@ -1,7 +1,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "analytical-platform-dashboard-service.name" -}}
+{{- define "dashboard-service.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
@@ -10,7 +10,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "analytical-platform-dashboard-service.fullname" -}}
+{{- define "dashboard-service.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -26,16 +26,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "analytical-platform-dashboard-service.chart" -}}
+{{- define "dashboard-service.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "analytical-platform-dashboard-service.labels" -}}
-helm.sh/chart: {{ include "analytical-platform-dashboard-service.chart" . }}
-{{ include "analytical-platform-dashboard-service.selectorLabels" . }}
+{{- define "dashboard-service.labels" -}}
+helm.sh/chart: {{ include "dashboard-service.chart" . }}
+{{ include "dashboard-service.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -45,17 +45,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "analytical-platform-dashboard-service.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "analytical-platform-dashboard-service.name" . }}
+{{- define "dashboard-service.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "dashboard-service.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "analytical-platform-dashboard-service.serviceAccountName" -}}
+{{- define "dashboard-service.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "analytical-platform-dashboard-service.fullname" .) .Values.serviceAccount.name }}
+{{- default (include "dashboard-service.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
