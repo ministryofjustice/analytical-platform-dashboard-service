@@ -78,7 +78,9 @@ ENV CONTAINER_USER="analyticalplatform" \
     DEBIAN_FRONTEND="noninteractive" \
     APP_ROOT="/app"
 
+
 RUN <<EOF
+#!/usr/bin/env bash
 userdel --remove --force ubuntu
 
 groupadd \
@@ -98,6 +100,7 @@ EOF
 STOPSIGNAL SIGINT
 
 RUN <<EOF
+#!/usr/bin/env bash
 apt-get update --quiet --yes
 apt-get install --quiet --yes \
     -o APT::Install-Recommends=false \

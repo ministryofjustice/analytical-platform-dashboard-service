@@ -3,6 +3,7 @@ from django.conf import settings
 from django.contrib.auth import login as _login
 from django.contrib.auth import logout as _logout
 from django.contrib.auth.decorators import login_not_required
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.http import urlencode
@@ -58,3 +59,11 @@ def logout(request):
     )
     url = f"https://{settings.AUTH0_DOMAIN}/v2/logout"
     return redirect(f"{url}?{params}")
+
+
+@login_not_required
+def healthcheck(request):
+    """
+    Healthcheck view for the dashboard service.
+    """
+    return HttpResponse("OK")

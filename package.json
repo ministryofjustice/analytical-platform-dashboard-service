@@ -16,6 +16,7 @@
     "uuid": "9.0.1"
   },
   "devDependencies": {
+    "prettier": "3.5.3",
     "sass": "1.86.3"
   },
   "scripts": {
