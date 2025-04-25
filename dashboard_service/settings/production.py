@@ -29,4 +29,3 @@ SESSION_COOKIE_SECURE = True
 # Use the X-Forwarded-Proto header to determine if the request is secure
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
-SECURE_SSL_REDIRECT = True
