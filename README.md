@@ -62,6 +62,12 @@ Install pre-commit hooks with:
 pre-commit install
 ```
 
+### Running Alongside the Control Panel
+
+The Dashboard Service is intentionally designed to know as little as possible about users and their access. All access to dashboards comes from the Control Panel API. As such, you will need to run the Control Panel alongside the Dashboard Service, otherwise you will encounter errors as soon as you log in.
+
+You can set the URL of the Control Panel API using the `CONTROL_PANEL_API_URL` variable in your `.env` file.
+
 ## Authentication
 
 Web applications for the dev and alpha Auth0 tenants are managed in code in the [Analytical Platform repository](https://github.com/ministryofjustice/analytical-platform/tree/main/terraform/auth0). They are configured to use passwordless authentication.
