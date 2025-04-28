@@ -61,3 +61,18 @@ Install pre-commit hooks with:
 ```sh
 pre-commit install
 ```
+
+## Authentication
+
+Web applications for the dev and alpha Auth0 tenants are managed in code in the [Analytical Platform repository](https://github.com/ministryofjustice/analytical-platform/tree/main/terraform/auth0). They are configured to use passwordless authentication.
+
+In addition, a client grant has been set up for each to allow machine-to-machine access with the Control Panel API.
+
+To gain access to the Dashboard Service, a user must have the `access:dashboard` role. This role is granted to users when they are given access to a dashboard via the Control Panel. Email domains can also be whitelisted, so that any user with a valid email will be assigned the role upon their initial login to the Dashboard Service.
+
+### Viewing Dashboards
+
+Once a user has logged in to the Dashboard Service, they will only be able to view dashboards that either:
+
+1. Have had access granted to them via the Control Panel, or
+1. Have been whitelisted for all users with a specific email domain (e.g., all `@justice.gov.uk` users).
