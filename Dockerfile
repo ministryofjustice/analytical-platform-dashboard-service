@@ -1,6 +1,6 @@
 ##### BUILD PYTHON
 
-FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:e3b7fe80bcb7bd1b8c2301b8cf88973aa04774afdcf34d645897117dcbc0bc4a AS build-python
+FROM public.ecr.aws/ubuntu/ubuntu:24.04@sha256:a658d4be9ef8f95742fa7ff630226d0754ece827c6de984b7ac406866f56d653 AS build-python
 
 SHELL ["/bin/bash", "-e", "-u", "-o", "pipefail", "-c", "-x"]
 
