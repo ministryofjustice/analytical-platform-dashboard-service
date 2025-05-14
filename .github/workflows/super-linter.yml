@@ -15,7 +15,7 @@ jobs:
       contents: read
       packages: read
       statuses: write
-    uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-super-linter.yml@bce6c62987461eac1853f245727b2d2584e55dc5 # v2.2.0
+    uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-super-linter.yml@a9d3c362c3180d072c372a9a5e03a8d4a0c92184 # v2.4.0
     with:
       # VALIDATE_CHECKOV: false # Disabling while in discovery
       # VALIDATE_KUBERNETES_KUBECONFORM is set to false as it cannot process Helm charts
