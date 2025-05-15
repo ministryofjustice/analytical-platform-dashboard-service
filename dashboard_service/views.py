@@ -1,10 +1,11 @@
-from authlib.integrations.django_client import OAuth
+import sentry_sdk
+from authlib.integrations.django_client import OAuth, OAuthError
 from django.conf import settings
 from django.contrib.auth import login as _login
 from django.contrib.auth import logout as _logout
 from django.contrib.auth.decorators import login_not_required
 from django.http import HttpResponse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import urlencode
 
@@ -37,7 +38,11 @@ def login(request):
 
 @login_not_required
 def callback(request):
-    token = oauth.auth0.authorize_access_token(request)
+    try:
+        token = oauth.auth0.authorize_access_token(request)
+    except OAuthError as e:
+        sentry_sdk.capture_exception(e)
+        return redirect(reverse("login-fail"))
     userinfo = token["userinfo"]
     # with the email connection we dont get much info back about the user.
     # the nickname field is used as the username to match Control Panel, could
@@ -67,3 +72,10 @@ def healthcheck(request):
     Healthcheck view for the dashboard service.
     """
     return HttpResponse("OK")
+
+
+@login_not_required
+def login_fail(request):
+    if request.user.is_authenticated:
+        return redirect(reverse("dashboards:index"))
+    return render(request, "login/login_fail.html")

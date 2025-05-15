@@ -25,8 +25,9 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("admin/", admin.site.urls),
     path("login/", views.login, name="login"),
-    path("callback/", views.callback, name="callback"),
+    path("login-fail/", views.login_fail, name="login-fail"),
     path("logout/", views.logout, name="logout"),
+    path("callback/", views.callback, name="callback"),
     path("dashboards/", include("dashboard_service.dashboards.urls", namespace="dashboards")),
     path("healthcheck/", views.healthcheck, name="healthcheck"),
 ]
