@@ -1,0 +1,12 @@
+{% extends "base/base.html" %}
+{% block title %}Login Failed{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-width-container">
+    <h1 class="govuk-heading-l">Login failed</h1>
+    <p class="govuk-body">We were unable to log you in, <a href="{% url "login" %}">please retry</a>.</p>
+    <p class="govuk-body">If the problem persists contact Analytical Platform support.</p>
+  </div>
+</div>
+{% endblock %}
