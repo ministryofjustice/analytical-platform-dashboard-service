@@ -25,7 +25,6 @@
 
   {% block main %}
   <div class="{% block base_div_class %}govuk-width-container app-width-container{% endblock base_div_class %}">
-
     <main class="govuk-main-wrapper" id="main-content" role="main">
       {% block content %}
       {% endblock content %}
@@ -33,7 +32,9 @@
   </div>
   {% endblock main %}
 
+  {% block footer %}
   {% include 'base/footer.html' %}
+  {% endblock footer %}
 
   {% block scripts %}
   {% endblock scripts %}
