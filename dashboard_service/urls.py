@@ -38,3 +38,7 @@ if settings.DEBUG and "debug_toolbar" in settings.INSTALLED_APPS:
     from debug_toolbar.toolbar import debug_toolbar_urls  # noqa
 
     urlpatterns += debug_toolbar_urls()
+    urlpatterns += [
+        path("debug/404/", views.debug_404, name="debug-404"),
+        path("debug/500/", views.debug_500, name="debug-500"),
+    ]

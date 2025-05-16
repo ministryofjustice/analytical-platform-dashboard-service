@@ -2,41 +2,32 @@
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-width-container">
+  <div class="govuk-grid-column-full">
 
-    <h1 class="govuk-heading-l">Dashboard List</h1>
+    <h1 class="govuk-heading-l">Dashboards</h1>
 
-    <table class="govuk-table">
-      <caption class="govuk-table__caption govuk-table__caption--m">Dashboards you can access</caption>
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">Name</th>
-          <th scope="col" class="govuk-table__header">Admins</th>
-          <th scope="col" class="govuk-table__header">Action</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        {% for dashboard in dashboards %}
+    {% if dashboards %}
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">{{ dashboard.name }}</th>
-            <td class="govuk-table__cell">{% for admin in dashboard.admins %}{{admin.email}}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
-            <td class="govuk-table__cell"><a href="{% url "dashboards:detail" quicksight_id=dashboard.quicksight_id %}">View dashboard</a></td>
+            <th scope="col" class="govuk-table__header">Name</th>
+            <th scope="col" class="govuk-table__header">Admins</th>
+            <th scope="col" class="govuk-table__header">Action</th>
           </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-
-
-
-    <!-- <ul class="govuk-list">
-
-    {% for dashboard in dashboards %}
-      <li>
-        <a href="{% url "dashboards:detail" quicksight_id=dashboard.quicksight_id %}">{{ dashboard.name }}</a>
-      </li>
-    {% endfor %}
-    </ul> -->
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for dashboard in dashboards %}
+            <tr class="govuk-table__row">
+              <th scope="row" class="govuk-table__header">{{ dashboard.name }}</th>
+              <td class="govuk-table__cell">{% for admin in dashboard.admins %}{{admin.email}}{% if not forloop.last %}, {% endif %}{% endfor %}</td>
+              <td class="govuk-table__cell"><a href="{% url "dashboards:detail" quicksight_id=dashboard.quicksight_id %}">View dashboard</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="govuk-body">You do not have access to any dashboards.</p>
+    {% endif %}
   </div>
 </div>
 {% endblock content %}
