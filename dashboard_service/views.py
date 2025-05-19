@@ -79,3 +79,17 @@ def login_fail(request):
     if request.user.is_authenticated:
         return redirect(reverse("dashboards:index"))
     return render(request, "login/login_fail.html")
+
+
+def debug_404(request):
+    """
+    Example 404 view for the dashboard service.
+    """
+    return render(request, "404.html", status=404)
+
+
+def debug_500(request):
+    """
+    Example 500 view for the dashboard service.
+    """
+    return render(request, "500.html", status=500)
