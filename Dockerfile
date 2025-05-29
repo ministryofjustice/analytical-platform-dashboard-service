@@ -12,7 +12,7 @@ apt-get install --quiet --yes \
     -o APT::Install-Recommends=false \
     -o APT::Install-Suggests=false \
     "python3.12-dev=3.12.3-1ubuntu0.5" \
-    "ca-certificates=20240203"
+    "ca-certificates=20241223"
 EOF
 
 # Install uv
