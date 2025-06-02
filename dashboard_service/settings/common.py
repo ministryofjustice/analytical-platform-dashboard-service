@@ -158,11 +158,15 @@ AUTHLIB_OAUTH_CLIENTS = {
         "client_secret": AUTH0_CLIENT_SECRET,
         "client_kwargs": {
             "scope": "openid profile email",
+            "prompt": "login",  # forces login prompt
         },
         "server_metadata_url": f"https://{AUTH0_DOMAIN}/.well-known/openid-configuration",
         "authorize_params": {"isPasswordlessFlow": True},  # required to trigger passwordless login
     }
 }
+
+# Controls user session duration after which they will be logged out
+SESSION_COOKIE_AGE = int(os.environ.get("SESSION_COOKIE_AGE", 60 * 60 * 24 * 1))  # 1 day
 
 # -- Sentry error tracking
 
