@@ -158,6 +158,7 @@ AUTHLIB_OAUTH_CLIENTS = {
         "client_secret": AUTH0_CLIENT_SECRET,
         "client_kwargs": {
             "scope": "openid profile email",
+            "prompt": "login",  # forces login prompt
         },
         "server_metadata_url": f"https://{AUTH0_DOMAIN}/.well-known/openid-configuration",
         "authorize_params": {"isPasswordlessFlow": True},  # required to trigger passwordless login
@@ -182,3 +183,5 @@ if os.environ.get("SENTRY_DSN"):
 
 # Control Panel API settings
 CONTROL_PANEL_API_URL = os.environ.get("CONTROL_PANEL_API_URL")
+
+SESSION_COOKIE_AGE = os.environ.get("SESSION_COOKIE_AGE", 60 * 60 * 24 * 1)  # 1 day
