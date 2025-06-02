@@ -165,6 +165,9 @@ AUTHLIB_OAUTH_CLIENTS = {
     }
 }
 
+# Controls user session duration after which they will be logged out
+SESSION_COOKIE_AGE = int(os.environ.get("SESSION_COOKIE_AGE", 60 * 60 * 24 * 1))  # 1 day
+
 # -- Sentry error tracking
 
 if os.environ.get("SENTRY_DSN"):
@@ -183,5 +186,3 @@ if os.environ.get("SENTRY_DSN"):
 
 # Control Panel API settings
 CONTROL_PANEL_API_URL = os.environ.get("CONTROL_PANEL_API_URL")
-
-SESSION_COOKIE_AGE = int(os.environ.get("SESSION_COOKIE_AGE", 60 * 60 * 24 * 1))  # 1 day
