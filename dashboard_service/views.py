@@ -33,6 +33,9 @@ def login(request):
     if request.user.is_authenticated:
         return redirect(reverse("dashboards:index"))
     redirect_uri = request.build_absolute_uri(reverse("callback"))
+    if "next" in request.GET:
+        urlencode_next = urlencode({"next": request.GET["next"]})
+        redirect_uri = f"{redirect_uri}?{urlencode_next}"
     return oauth.auth0.authorize_redirect(request, redirect_uri)
 
 
@@ -51,7 +54,8 @@ def callback(request):
         username=userinfo["nickname"], defaults={"email": userinfo["email"]}
     )
     _login(request, user=user)
-    return redirect(reverse("dashboards:index"))
+    redirect_to = request.GET.get("next", settings.LOGIN_REDIRECT_URL)
+    return redirect(redirect_to)
 
 
 def logout(request):
