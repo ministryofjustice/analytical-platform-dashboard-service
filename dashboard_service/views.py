@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_not_required
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
-from django.utils.http import urlencode
+from django.utils.http import url_has_allowed_host_and_scheme, urlencode
 
 from dashboard_service.users.models import User
 
@@ -32,7 +32,12 @@ def index(request):
 def login(request):
     if request.user.is_authenticated:
         return redirect(reverse("dashboards:index"))
+
     redirect_uri = request.build_absolute_uri(reverse("callback"))
+    next_url = request.GET.get("next", None)
+    if url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        urlencode_next = urlencode({"next": next_url})
+        redirect_uri = f"{redirect_uri}?{urlencode_next}"
     return oauth.auth0.authorize_redirect(request, redirect_uri)
 
 
@@ -51,7 +56,11 @@ def callback(request):
         username=userinfo["nickname"], defaults={"email": userinfo["email"]}
     )
     _login(request, user=user)
-    return redirect(reverse("dashboards:index"))
+    next_url = request.GET.get("next", None)
+    if url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+        return redirect(next_url)
+
+    return redirect(settings.LOGIN_REDIRECT_URL)
 
 
 def logout(request):
