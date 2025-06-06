@@ -41,7 +41,7 @@ class TestIndexView:
         response = client.get(url)
 
         assert response.status_code == 302
-        assert settings.LOGIN_URL in response.url
+        assert response.url == f"{settings.LOGIN_URL}?next={url}"
 
     @pytest.mark.django_db
     def test_login_required(self, client, user):
@@ -81,7 +81,7 @@ class TestDetailView:
         response = client.get(url)
 
         assert response.status_code == 302
-        assert settings.LOGIN_URL in response.url
+        assert response.url == f"{settings.LOGIN_URL}?next={url}"
 
         user.save()
         client.force_login(user)
