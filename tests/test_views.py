@@ -2,30 +2,60 @@ from unittest.mock import Mock, patch
 
 import pytest
 from authlib.integrations.django_client import OAuthError
+from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.urls import reverse
+from django.utils.http import urlencode
 
 from dashboard_service.users.models import User
 from dashboard_service.views import callback, login, logout
 
 
+@pytest.mark.parametrize(
+    "next_url, expected_next",
+    [
+        ("", None),
+        ("/some/next/url/", "/some/next/url/"),
+        (None, None),
+        ("https://malicious-url.com", None),  # Should not allow external URLs
+    ],
+    ids=["next_empty", "next_valid", "next_none", "next_malicious"],
+)
 @patch("dashboard_service.views.reverse", return_value="/callback/")
-def test_login_calls_authorize_redirect_correctly(mock_reverse, mock_auth0, rf):
-    request = rf.get("/login/")
+def test_login_calls_authorize_redirect_correctly(
+    mock_reverse, next_url, expected_next, mock_auth0, rf
+):
+    query_params = {"next": next_url} if next_url else {}
+    request = rf.get("/login/", query_params=query_params)
     request.user = AnonymousUser()
-    expected_redirect_uri = "http://testserver/callback/"
-    request.build_absolute_uri = Mock(return_value=expected_redirect_uri)
+    redirect_url = "http://testserver/callback/"
+    request.build_absolute_uri = Mock(return_value=redirect_url)
 
     login(request)
+    if expected_next:
+        redirect_url = f"{redirect_url}?{urlencode(query_params)}"
 
-    mock_auth0.authorize_redirect.assert_called_once_with(request, expected_redirect_uri)
+    mock_auth0.authorize_redirect.assert_called_once_with(request, redirect_url)
     mock_reverse.assert_called_once_with("callback")
 
 
+@pytest.mark.parametrize(
+    "next_url, expected_redirect",
+    [
+        ("", settings.LOGIN_REDIRECT_URL),
+        ("/some/next/url/", "/some/next/url/"),
+        (None, settings.LOGIN_REDIRECT_URL),
+        ("https://malicious-url.com", settings.LOGIN_REDIRECT_URL),
+    ],
+    ids=["next_empty", "next_filled", "no_next", "malicious_url"],
+)
 @patch("dashboard_service.views._login")
 @patch("dashboard_service.views.User.objects.get_or_create")
-def test_callback_authenticates_and_redirects(mock_get_or_create, mock_login, rf, mock_auth0):
-    request = rf.get("/callback/")
+def test_callback_authenticates_and_redirects(
+    mock_get_or_create, mock_login, next_url, expected_redirect, rf, mock_auth0
+):
+    query_params = {"next": next_url} if next_url else {}
+    request = rf.get("/callback/", query_params=query_params)
     user = Mock()
     mock_get_or_create.return_value = (user, True)
     mock_auth0.authorize_access_token.return_value = {
@@ -40,7 +70,7 @@ def test_callback_authenticates_and_redirects(mock_get_or_create, mock_login, rf
     )
     mock_login.assert_called_once_with(request, user=user)
     assert response.status_code == 302
-    assert response.url == "/dashboards/"
+    assert response.url == expected_redirect
 
 
 @patch("dashboard_service.views._login")
