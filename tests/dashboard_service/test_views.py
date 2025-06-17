@@ -58,9 +58,45 @@ class TestIndexView:
         view_obj.request.user = user
 
         with patch.object(api_client, "make_request") as mock_make_request:
+            mock_make_request.return_value = {
+                "results": [
+                    {
+                        "name": "test-dashboard",
+                        "quicksight_id": "123456789",
+                        "admins": [{"name": "test_user", "email": "test.user@justice.gov.uk"}],
+                    }
+                ],
+                "next": None,
+                "previous": None,
+            }
             context = view_obj.get_context_data()
 
         assert "dashboards" in context
+        assert "pagination" not in context
+        mock_make_request.assert_called_once_with("dashboards", params={"email": user.email})
+
+    def test_get_context_data_pagination(self, api_client, view_obj, user):
+        view_obj.request.user = user
+
+        with patch.object(api_client, "make_request") as mock_make_request:
+            mock_make_request.return_value = {
+                "results": [
+                    {
+                        "name": "test-dashboard",
+                        "quicksight_id": "123456789",
+                        "admins": [{"name": "test_user", "email": "test.user@justice.gov.uk"}],
+                    }
+                ],
+                "next": "next_link",
+                "previous": None,
+                "page_numbers": [1, 2, 3],
+                "current_page": 1,
+                "count": 30,
+            }
+            context = view_obj.get_context_data()
+
+        assert "dashboards" in context
+        assert "pagination" in context
         mock_make_request.assert_called_once_with("dashboards", params={"email": user.email})
 
 
