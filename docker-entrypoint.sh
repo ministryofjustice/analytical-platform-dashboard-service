@@ -14,9 +14,9 @@ python manage.py migrate --noinput
 
 echo "Running Django server on ${ADDRESS}:${PORT}"
 gunicorn dashboard_service.wsgi:application \
-    --bind "${ADDRESS}:${PORT}" \
-    --workers 2 \
-    --threads 4 \
-    --log-level info \
-    --access-logfile - \
-    --error-logfile -
+        --bind "${ADDRESS}:${PORT}" \
+        --workers 2 \
+        --threads 4 \
+        --log-level info \
+        --access-logfile - \
+        --error-logfile -
