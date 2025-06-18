@@ -2,7 +2,10 @@ import time
 from typing import Any
 
 import requests
+import structlog
 from django.conf import settings
+
+logger = structlog.get_logger(__name__)
 
 
 class ControlPanelApiClient:
