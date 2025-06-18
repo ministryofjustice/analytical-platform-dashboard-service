@@ -9,10 +9,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN <<EOF
 apt-get update --quiet --yes
 apt-get install --quiet --yes \
-    -o APT::Install-Recommends=false \
-    -o APT::Install-Suggests=false \
-    "python3.12-dev=3.12.3-1ubuntu0.5" \
-    "ca-certificates=20240203"
+    --no-install-recommends \
+    python3.12-dev \
+    ca-certificates
 EOF
 
 # Install uv
@@ -103,10 +102,9 @@ RUN <<EOF
 #!/usr/bin/env bash
 apt-get update --quiet --yes
 apt-get install --quiet --yes \
-    -o APT::Install-Recommends=false \
-    -o APT::Install-Suggests=false \
-    "python3.12-dev=3.12.3-1ubuntu0.5" \
-    "ca-certificates=20240203"
+    --no-install-recommends \
+    python3.12-dev \
+    ca-certificates
 apt-get clean --yes
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOF
