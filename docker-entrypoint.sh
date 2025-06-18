@@ -13,4 +13,10 @@ echo "Migrating the database"
 python manage.py migrate --noinput
 
 echo "Running Django server on ${ADDRESS}:${PORT}"
-gunicorn --bind "${ADDRESS}":"${PORT}" dashboard_service.wsgi:application --workers 2 --threads 4
+gunicorn dashboard_service.wsgi:application \
+    --bind "${ADDRESS}:${PORT}" \
+    --workers 2 \
+    --threads 4 \
+    --log-level info \
+    --access-logfile - \
+    --error-logfile -
