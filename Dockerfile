@@ -9,10 +9,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN <<EOF
 apt-get update --quiet --yes
 apt-get install --quiet --yes \
-    -o APT::Install-Recommends=false \
-    -o APT::Install-Suggests=false \
-    "python3.12-dev=3.12.3-1ubuntu0.5" \
-    "ca-certificates=20240203"
+    --no-install-recommends \
+    python3.12-dev \
+    ca-certificates
 EOF
 
 # Install uv
@@ -103,10 +102,9 @@ RUN <<EOF
 #!/usr/bin/env bash
 apt-get update --quiet --yes
 apt-get install --quiet --yes \
-    -o APT::Install-Recommends=false \
-    -o APT::Install-Suggests=false \
-    "python3.12-dev=3.12.3-1ubuntu0.5" \
-    "ca-certificates=20240203"
+    --no-install-recommends \
+    python3.12-dev \
+    ca-certificates
 apt-get clean --yes
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOF
@@ -121,7 +119,7 @@ COPY --from=build-python --chown=${CONTAINER_USER}:${CONTAINER_GROUP} ${APP_ROOT
 COPY --from=build-node --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /build/static/assets/css/app.css ${APP_ROOT}/static/assets/css/app.css
 COPY --from=build-node --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /build/node_modules/govuk-frontend/dist/govuk/assets/fonts/. ${APP_ROOT}/static/assets/fonts
 COPY --from=build-node --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /build/node_modules/govuk-frontend/dist/govuk/assets/images/. ${APP_ROOT}/static/assets/images
-COPY --from=build-node --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /build/node_modules/govuk-frontend/dist/govuk/all.bundle.js ${APP_ROOT}/static/assets/js/govuk.js
+COPY --from=build-node --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /build/node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js ${APP_ROOT}/static/assets/js/govuk-frontend.min.js
 COPY --from=build-node --chown=${CONTAINER_USER}:${CONTAINER_GROUP} /build/node_modules/@ministryofjustice/frontend/moj/assets/images/. ${APP_ROOT}/static/assets/images
 
 COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} manage.py ${APP_ROOT}/manage.py

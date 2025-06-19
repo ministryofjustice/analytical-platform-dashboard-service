@@ -1,9 +1,12 @@
 import requests
+import structlog
 from django.http import Http404
 from django.urls import reverse
 from django.views.generic import TemplateView
 
 from dashboard_service.dashboards.api import api_client
+
+logger = structlog.get_logger(__name__)
 
 
 class IndexView(TemplateView):
@@ -48,6 +51,7 @@ class IndexView(TemplateView):
         response = api_client.make_request("dashboards", params=params)
         context["dashboards"] = response["results"]
         self.build_pagination_data(response, context)
+        logger.info("dashboard_list_retrieved")
 
         return context
 
@@ -73,3 +77,13 @@ class DetailView(TemplateView):
             [admin["email"] for admin in dashboard_data["admins"]]
         )
         return context
+
+    def render_to_response(self, context, **response_kwargs):
+        response = super().render_to_response(context, **response_kwargs)
+        dashboard_data = context.get("dashboard", {})
+        logger.info(
+            "dashboard_viewed",
+            dashboard_name=dashboard_data.get("name"),
+            user_arn=dashboard_data.get("anonymous_user_arn"),
+        )
+        return response
