@@ -217,6 +217,7 @@ structlog.configure(
     cache_logger_on_first_use=True,
 )
 
+LOG_LEVEL = os.environ.get("LOG_LEVEL", None)
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -239,27 +240,27 @@ LOGGING = {
     },
     "root": {
         "handlers": ["console"],
-        "level": "INFO",
+        "level": LOG_LEVEL or "INFO",
     },
     "loggers": {
         "dashboard_service": {
             "handlers": ["console"],
-            "level": "DEBUG",
+            "level": LOG_LEVEL or "DEBUG",
             "propagate": False,
         },
         "django": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": LOG_LEVEL or "INFO",
             "propagate": False,
         },
         "gunicorn.access": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": LOG_LEVEL or "INFO",
             "propagate": False,
         },
         "gunicorn.error": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": LOG_LEVEL or "INFO",
             "propagate": False,
         },
     },
