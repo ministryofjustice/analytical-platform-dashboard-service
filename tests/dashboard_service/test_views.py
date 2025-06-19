@@ -54,7 +54,8 @@ class TestIndexView:
         assert response.status_code == 200
         assert "dashboards/index.html" in [t.name for t in response.templates]
 
-    def test_get_context_data(self, api_client, view_obj, user):
+    def test_get_context_data(self, api_client, view_obj, user, caplog):
+        caplog.set_level("INFO", logger="dashboard_service")
         view_obj.request.user = user
 
         with patch.object(api_client, "make_request") as mock_make_request:
@@ -62,6 +63,7 @@ class TestIndexView:
 
         assert "dashboards" in context
         mock_make_request.assert_called_once_with("dashboards", params={"email": user.email})
+        assert any("dashboard_list_retrieved" in rec.getMessage() for rec in caplog.records)
 
 
 class TestDetailView:
@@ -123,3 +125,12 @@ class TestDetailView:
 
             with pytest.raises(requests.exceptions.HTTPError):
                 view_obj.get_context_data()
+
+    def test_render_to_response(self, api_client, view_obj, user, caplog):
+        caplog.set_level("INFO", logger="dashboard_service")
+        with patch("django.views.generic.TemplateView.render_to_response") as mock_render:
+            response = view_obj.render_to_response({})
+
+        assert any("dashboard_viewed" in rec.getMessage() for rec in caplog.records)
+        mock_render.assert_called_once()
+        assert response == mock_render.return_value

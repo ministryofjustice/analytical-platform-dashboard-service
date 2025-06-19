@@ -2,7 +2,10 @@ import time
 from typing import Any
 
 import requests
+import structlog
 from django.conf import settings
+
+logger = structlog.get_logger(__name__)
 
 
 class ControlPanelApiClient:
@@ -27,6 +30,11 @@ class ControlPanelApiClient:
         }
         response = requests.post(url=token_url, data=data)
         response.raise_for_status()
+        logger.debug(
+            "get_access_token",
+            status_code=response.status_code,
+            response_time=response.elapsed.total_seconds(),
+        )
         return response.json()
 
     def token_expired(self) -> bool:
@@ -78,6 +86,13 @@ class ControlPanelApiClient:
 
         response = requests.request(method, url, timeout=timeout, **kwargs)
         response.raise_for_status()
+        logger.debug(
+            "api_request",
+            method=method,
+            url=url,
+            status_code=response.status_code,
+            response_time=response.elapsed.total_seconds(),
+        )
         return response.json()
 
 
