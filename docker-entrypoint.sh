@@ -18,6 +18,6 @@ gunicorn dashboard_service.wsgi:application \
   --bind "${ADDRESS}:${PORT}" \
   --workers 2 \
   --threads 4 \
-  --log-level ${LOG_LEVEL} \
+  --log-level "${LOG_LEVEL}" \
   --access-logfile - \
   --error-logfile -
