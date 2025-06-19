@@ -11,3 +11,11 @@ SECRET_KEY = "test-secret-key"
 
 AUTH0_CLIENT_ID = "test-client-id"
 AUTH0_DOMAIN = "test.eu.auth0.com"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+}
