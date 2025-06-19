@@ -2,6 +2,7 @@
 ADDRESS=${ADDRESS:-"0.0.0.0"}
 PORT=${PORT:-"8000"}
 WORKERS=${WORKERS:-"4"}
+LOG_LEVEL=${LOG_LEVEL:-"info"}
 
 echo "Run django checks"
 python manage.py check --deploy
@@ -17,6 +18,6 @@ gunicorn dashboard_service.wsgi:application \
   --bind "${ADDRESS}:${PORT}" \
   --workers 2 \
   --threads 4 \
-  --log-level info \
+  --log-level ${LOG_LEVEL} \
   --access-logfile - \
   --error-logfile -

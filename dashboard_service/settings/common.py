@@ -15,7 +15,6 @@ from pathlib import Path
 
 import structlog
 from django.urls import reverse_lazy
-from structlog.stdlib import ProcessorFormatter
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -44,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third-party
     "django_extensions",
+    "django_structlog",
     # Local
     "dashboard_service.dashboards",
     "dashboard_service.users",
@@ -56,7 +56,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "dashboard_service.middleware.logging.LoggingContextMiddleware",
+    "django_structlog.middlewares.RequestMiddleware",
     "django.contrib.auth.middleware.LoginRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -194,74 +194,55 @@ if os.environ.get("SENTRY_DSN"):
 CONTROL_PANEL_API_URL = os.environ.get("CONTROL_PANEL_API_URL")
 
 # Logging configuration
-structlog.configure(
-    processors=[
-        # 1. merge in any bound contextvars (request_id, user, etc.)
-        structlog.contextvars.merge_contextvars,
-        # 2. drop below-LEVEL events
-        structlog.stdlib.filter_by_level,
-        # 3. **stamp a timestamp**, **inject level** and **inject logger name** here
-        structlog.processors.TimeStamper(fmt="[%Y-%m-%d %H:%M:%S]", utc=False),
-        structlog.stdlib.add_log_level,
-        structlog.stdlib.add_logger_name,
-        # 4. handle %-format args, exception & stack-info formatting
-        structlog.stdlib.PositionalArgumentsFormatter(),
-        structlog.processors.StackInfoRenderer(),
-        structlog.processors.format_exc_info,
-        # 5. hand off the fully-decorated event dict to your handler
-        structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
-    ],
-    context_class=structlog.threadlocal.wrap_dict(dict),
-    logger_factory=structlog.stdlib.LoggerFactory(),
-    wrapper_class=structlog.stdlib.BoundLogger,
-    cache_logger_on_first_use=True,
-)
-
-LOG_LEVEL = os.environ.get("LOG_LEVEL", None)
+LOG_LEVEL = os.environ.get("LOG_LEVEL", "INFO")
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "default": {
-            "()": ProcessorFormatter,
+        "plain_console": {
+            "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.dev.ConsoleRenderer(),
-            "foreign_pre_chain": [
-                structlog.processors.TimeStamper(fmt="[%Y-%m-%d %H:%M:%S]"),
-                structlog.stdlib.add_log_level,
-                structlog.stdlib.add_logger_name,
-            ],
-        },
+        }
     },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "formatter": "default",
+            "formatter": "plain_console",
         },
     },
     "root": {
         "handlers": ["console"],
-        "level": LOG_LEVEL or "INFO",
+        "level": LOG_LEVEL,
     },
     "loggers": {
         "dashboard_service": {
             "handlers": ["console"],
-            "level": LOG_LEVEL or "DEBUG",
+            "level": LOG_LEVEL,
             "propagate": False,
         },
-        "django": {
+        "django_structlog": {
             "handlers": ["console"],
-            "level": LOG_LEVEL or "INFO",
-            "propagate": False,
-        },
-        "gunicorn.access": {
-            "handlers": ["console"],
-            "level": LOG_LEVEL or "INFO",
-            "propagate": False,
-        },
-        "gunicorn.error": {
-            "handlers": ["console"],
-            "level": LOG_LEVEL or "INFO",
+            "level": LOG_LEVEL,
             "propagate": False,
         },
     },
 }
+
+structlog.configure(
+    processors=[
+        structlog.contextvars.merge_contextvars,
+        structlog.stdlib.filter_by_level,
+        structlog.processors.TimeStamper(fmt="iso"),
+        structlog.stdlib.add_logger_name,
+        structlog.stdlib.add_log_level,
+        structlog.stdlib.PositionalArgumentsFormatter(),
+        structlog.processors.StackInfoRenderer(),
+        structlog.processors.format_exc_info,
+        structlog.processors.UnicodeDecoder(),
+        structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+    ],
+    logger_factory=structlog.stdlib.LoggerFactory(),
+    cache_logger_on_first_use=True,
+)
+
+DJANGO_STRUCTLOG_USER_ID_FIELD = "email"

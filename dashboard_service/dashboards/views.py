@@ -20,7 +20,7 @@ class IndexView(TemplateView):
         context["dashboards"] = api_client.make_request(
             "dashboards", params={"email": self.request.user.email}
         )["results"]
-        logger.info("Dashboard list retrieved")
+        logger.info("dashboard_list_retrieved")
         return context
 
 
@@ -50,7 +50,7 @@ class DetailView(TemplateView):
         response = super().render_to_response(context, **response_kwargs)
         dashboard_data = context.get("dashboard", {})
         logger.info(
-            "Dashboard viewed",
+            "dashboard_viewed",
             dashboard_name=dashboard_data.get("name"),
             user_arn=dashboard_data.get("anonymous_user_arn"),
         )
