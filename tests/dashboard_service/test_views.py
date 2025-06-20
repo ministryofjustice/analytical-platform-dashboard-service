@@ -75,8 +75,10 @@ class TestIndexView:
         assert "dashboards" in context
         assert "pagination" not in context
         mock_make_request.assert_called_once_with("dashboards", params={"email": user.email})
+        assert any("dashboard_list_retrieved" in rec.getMessage() for rec in caplog.records)
 
     def test_get_context_data_pagination(self, api_client, view_obj, user, caplog):
+        caplog.set_level("INFO", logger="dashboard_service")
         view_obj.request.user = user
 
         with patch.object(api_client, "make_request") as mock_make_request:
