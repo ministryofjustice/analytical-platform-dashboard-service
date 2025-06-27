@@ -16,26 +16,39 @@ class IndexView(TemplateView):
 
     template_name = "dashboards/index.html"
 
-    def build_pagination_data(self, response, context):
-        if response["next"] or response["previous"]:
+    def build_pagination_data(self, api_response, context):
+        dashboard_url = reverse("dashboards:index")
+        if api_response["next"] or api_response["previous"]:
             page_data = [
                 {
                     "number": page_number,
-                    "url": f"{reverse('dashboards:index')}?page={page_number}"
+                    "url": f"{dashboard_url}?page={page_number}"
                     if isinstance(page_number, int)
                     else None,
                     "is_elipsis": not isinstance(page_number, int),
                 }
-                for page_number in response["page_numbers"]
+                for page_number in api_response["page_numbers"]
             ]
 
-            context["pagination"] = {
-                "next": response["next"],
-                "previous": response["previous"],
-                "current_page": response["current_page"],
+            pagination_data = {
+                "next": None,
+                "previous": None,
+                "current_page": api_response["current_page"],
                 "page_data": page_data,
-                "count": response["count"],
+                "count": api_response["count"],
             }
+
+            if api_response["next"]:
+                pagination_data["next"] = (
+                    f"{dashboard_url}?page={api_response['current_page'] + 1}"
+                )
+
+            if api_response["previous"]:
+                pagination_data["previous"] = (
+                    f"{dashboard_url}?page={api_response['current_page'] - 1}"
+                )
+
+            context["pagination"] = pagination_data
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
