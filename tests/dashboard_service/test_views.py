@@ -54,14 +54,54 @@ class TestIndexView:
         assert response.status_code == 200
         assert "dashboards/index.html" in [t.name for t in response.templates]
 
-    def test_get_context_data(self, api_client, view_obj, user):
+    def test_get_context_data(self, api_client, view_obj, user, caplog):
+        caplog.set_level("INFO", logger="dashboard_service")
         view_obj.request.user = user
 
         with patch.object(api_client, "make_request") as mock_make_request:
+            mock_make_request.return_value = {
+                "results": [
+                    {
+                        "name": "test-dashboard",
+                        "quicksight_id": "123456789",
+                        "admins": [{"name": "test_user", "email": "test.user@justice.gov.uk"}],
+                    }
+                ],
+                "next": None,
+                "previous": None,
+            }
             context = view_obj.get_context_data()
 
         assert "dashboards" in context
+        assert "pagination" not in context
         mock_make_request.assert_called_once_with("dashboards", params={"email": user.email})
+        assert any("dashboard_list_retrieved" in rec.getMessage() for rec in caplog.records)
+
+    def test_get_context_data_pagination(self, api_client, view_obj, user, caplog):
+        caplog.set_level("INFO", logger="dashboard_service")
+        view_obj.request.user = user
+
+        with patch.object(api_client, "make_request") as mock_make_request:
+            mock_make_request.return_value = {
+                "results": [
+                    {
+                        "name": "test-dashboard",
+                        "quicksight_id": "123456789",
+                        "admins": [{"name": "test_user", "email": "test.user@justice.gov.uk"}],
+                    }
+                ],
+                "next": "next_link",
+                "previous": None,
+                "page_numbers": [1, 2, 3],
+                "current_page": 1,
+                "count": 30,
+            }
+            context = view_obj.get_context_data()
+
+        assert "dashboards" in context
+        assert "pagination" in context
+        mock_make_request.assert_called_once_with("dashboards", params={"email": user.email})
+        assert any("dashboard_list_retrieved" in rec.getMessage() for rec in caplog.records)
 
 
 class TestDetailView:
@@ -123,3 +163,12 @@ class TestDetailView:
 
             with pytest.raises(requests.exceptions.HTTPError):
                 view_obj.get_context_data()
+
+    def test_render_to_response(self, api_client, view_obj, user, caplog):
+        caplog.set_level("INFO", logger="dashboard_service")
+        with patch("django.views.generic.TemplateView.render_to_response") as mock_render:
+            response = view_obj.render_to_response({})
+
+        assert any("dashboard_viewed" in rec.getMessage() for rec in caplog.records)
+        mock_render.assert_called_once()
+        assert response == mock_render.return_value
