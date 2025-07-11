@@ -12,7 +12,7 @@ from dashboard_service.users.models import User
 
 @pytest.fixture
 def user():
-    return User(username="testuser", email="test@example.com")
+    return User(email="test@example.com")
 
 
 @pytest.fixture(autouse=True)

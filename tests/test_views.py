@@ -50,24 +50,21 @@ def test_login_calls_authorize_redirect_correctly(
     ids=["next_empty", "next_filled", "no_next", "malicious_url"],
 )
 @patch("dashboard_service.views._login")
-@patch("dashboard_service.views.User.objects.get_or_create")
+@patch("dashboard_service.views.get_or_create_user_from_id_token")
 def test_callback_authenticates_and_redirects(
-    mock_get_or_create, mock_login, next_url, expected_redirect, rf, mock_auth0
+    mock_get_or_update, mock_login, next_url, expected_redirect, rf, mock_auth0
 ):
     query_params = {"next": next_url} if next_url else {}
     request = rf.get("/callback/", query_params=query_params)
     user = Mock()
-    mock_get_or_create.return_value = (user, True)
-    mock_auth0.authorize_access_token.return_value = {
-        "userinfo": {"nickname": "testuser", "email": "test@example.com"}
-    }
+    mock_get_or_update.return_value = user
+    token = {"userinfo": {"nickname": "testuser", "email": "test@example.com"}}
+    mock_auth0.authorize_access_token.return_value = token
 
     response = callback(request)
 
     mock_auth0.authorize_access_token.assert_called_once_with(request)
-    mock_get_or_create.assert_called_once_with(
-        username="testuser", defaults={"email": "test@example.com"}
-    )
+    mock_get_or_update.assert_called_once_with(token["userinfo"])
     mock_login.assert_called_once_with(request, user=user)
     assert response.status_code == 302
     assert response.url == expected_redirect
@@ -124,7 +121,7 @@ class TestLoginFailView:
     @pytest.mark.django_db
     def test_redirects_if_authenticated(self, client):
         url = reverse("login-fail")
-        user = User.objects.create(username="testuser", email="testuser@example.com")
+        user = User.objects.create(email="testuser@example.com")
         client.force_login(user)
 
         response = client.get(url)

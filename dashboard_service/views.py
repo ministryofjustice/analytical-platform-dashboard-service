@@ -100,11 +100,6 @@ def callback(request):
         return redirect(reverse("login-fail"))
     userinfo = token["userinfo"]
 
-    user_id = userinfo.get("sub", "").split("|")[-1]
-    if not user_id:
-        sentry_sdk.capture_message("User ID not found in userinfo")
-        return redirect(reverse("login-fail"))
-
     user = get_or_create_user_from_id_token(userinfo)
     _login(request, user=user)
     next_url = request.GET.get("next", None)
