@@ -164,10 +164,8 @@ AUTHLIB_OAUTH_CLIENTS = {
         "client_secret": AUTH0_CLIENT_SECRET,
         "client_kwargs": {
             "scope": "openid profile email",
-            "prompt": "login",  # forces login prompt
         },
         "server_metadata_url": f"https://{AUTH0_DOMAIN}/.well-known/openid-configuration",
-        "authorize_params": {"isPasswordlessFlow": True},  # required to trigger passwordless login
     }
 }
 
