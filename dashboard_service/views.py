@@ -9,7 +9,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme, urlencode
 
-from dashboard_service.users.models import User
+from dashboard_service.users.utils import get_or_create_user_from_id_token
 
 oauth = OAuth()
 oauth.register(
@@ -49,12 +49,8 @@ def callback(request):
         sentry_sdk.capture_exception(e)
         return redirect(reverse("login-fail"))
     userinfo = token["userinfo"]
-    # with the email connection we dont get much info back about the user.
-    # the nickname field is used as the username to match Control Panel, could
-    # change this to the email field since we are using the email connection
-    user, _ = User.objects.get_or_create(
-        username=userinfo["nickname"], defaults={"email": userinfo["email"]}
-    )
+
+    user = get_or_create_user_from_id_token(userinfo)
     _login(request, user=user)
     next_url = request.GET.get("next", None)
     if url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
