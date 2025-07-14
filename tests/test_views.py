@@ -71,7 +71,7 @@ def test_callback_authenticates_and_redirects(
 
 
 @patch("dashboard_service.views._login")
-@patch("dashboard_service.views.User.objects.get_or_create")
+@patch("dashboard_service.views.get_or_create_user_from_id_token")
 def test_callback_redirects_to_login_fail_on_exception(
     mock_get_or_create, mock_login, rf, mock_auth0
 ):
