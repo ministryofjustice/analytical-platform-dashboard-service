@@ -41,7 +41,9 @@ def get_or_create_user_from_id_token(id_token):
     if not sub or "|" not in sub:
         raise ValueError("Invalid or missing 'sub' claim in ID token")
 
-    provider, external_id = sub.split("|", 1)
+    parts = sub.split("|")
+    provider = parts[0]
+    external_id = parts[-1]
 
     try:
         # First try to find user by auth0_id
