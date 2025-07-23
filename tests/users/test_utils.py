@@ -91,3 +91,22 @@ def test_does_not_update_auth0_id_for_non_waad(mock_get, mock_get_or_create, id_
     # Should not update auth0_id
     assert result.auth0_id == "some|otherid"
     mock_user.save.assert_not_called()
+
+
+@patch("dashboard_service.users.models.User.objects.get_or_create")
+@patch("dashboard_service.users.models.User.objects.get", side_effect=User.DoesNotExist)
+def test_creates_user_with_three_part_sub(mock_get, mock_get_or_create, id_token_factory):
+    mock_user = MagicMock(spec=User)
+    mock_get_or_create.return_value = (mock_user, True)
+
+    id_token = id_token_factory(sub="waad|clientname|xyz789", email="threepart@example.com")
+    result = get_or_create_user_from_id_token(id_token)
+
+    assert result is mock_user
+    mock_get_or_create.assert_called_once_with(
+        email="threepart@example.com",
+        defaults={
+            "auth0_id": "waad|clientname|xyz789",
+            "external_provider_id": "xyz789",  # last part is used
+        },
+    )
