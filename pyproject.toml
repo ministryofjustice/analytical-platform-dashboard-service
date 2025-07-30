@@ -14,7 +14,7 @@ dependencies = [
     "pytest-django>=4.11.1",
     "python-dotenv==1.1.1",
     "requests==2.32.4",
-    "sentry-sdk==2.32.0",
+    "sentry-sdk==2.34.1",
     "whitenoise==6.9.0",
 ]
 
