@@ -16,6 +16,6 @@ jobs:
     permissions:
       contents: read
       security-events: write
-    uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-codeql-analysis.yml@0c3b5555edfbbb10220ed435359dfd6769ad79ed # v3.2.0
+    uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-codeql-analysis.yml@8fb2a9ef59f5f62359b03ec3ef1b31aaa433150c # v4.4.0
     with:
       languages: '["actions", "python"]'

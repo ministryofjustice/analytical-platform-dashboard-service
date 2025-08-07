@@ -1,28 +1,17 @@
 ---
-name: Dependency Review
+name: 🔍 Dependency Review
 
 on:
   pull_request:
-    types:
-      - edited
-      - opened
-      - reopened
-      - synchronize
+    branches:
+      - main
 
 permissions: {}
 
 jobs:
   dependency-review:
     name: Dependency Review
-    runs-on: ubuntu-latest
     permissions:
       contents: read
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-
-      - name: Dependency Review
-        uses: actions/dependency-review-action@da24556b548a50705dd671f47852072ea4c105d9 # v4.7.1
-        with:
-          fail-on-severity: critical
+      pull-requests: write
+    uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-dependency-review.yml@8fb2a9ef59f5f62359b03ec3ef1b31aaa433150c # v4.4.0
