@@ -12,7 +12,7 @@ You will need to install `uv`, you can do this with brew:
 brew install uv
 ```
 
-Or see the full installation instructions [here](https://docs.astral.sh/uv/getting-started/installation/).
+Or see the full [installation instructions](https://docs.astral.sh/uv/getting-started/installation/).
 
 ### Database for local development
 
