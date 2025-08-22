@@ -23,7 +23,7 @@ dev = [
     "django-debug-toolbar==6.0.0",
     "pre-commit==4.3.0",
     "pytest>=8.3.5",
-    "ruff==0.12.9",
+    "ruff==0.12.10",
 ]
 
 [tool.ruff]
