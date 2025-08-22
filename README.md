@@ -82,3 +82,4 @@ Once a user has logged in to the Dashboard Service, they will only be able to vi
 
 1. Have had access granted to them via the Control Panel, or
 1. Have been whitelisted for all users with a specific email domain (e.g., all `@justice.gov.uk` users).
+1. Exist
