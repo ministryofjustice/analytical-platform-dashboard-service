@@ -5,7 +5,7 @@ description = "Dashboard Service for Analytical Platform"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "authlib==1.6.1",
+    "authlib==1.6.2",
     "django==5.2.5",
     "django-extensions==4.1",
     "django-structlog==9.1.1",
