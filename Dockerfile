@@ -71,9 +71,9 @@ ENV PATH=/app/bin:$PATH
 # Don't run your app as root.
 
 ENV CONTAINER_USER="analyticalplatform" \
-    CONTAINER_UID="1000" \
+    CONTAINER_UID="10001" \
     CONTAINER_GROUP="analyticalplatform" \
-    CONTAINER_GID="1000" \
+    CONTAINER_GID="10001" \
     DEBIAN_FRONTEND="noninteractive" \
     APP_ROOT="/app"
 
