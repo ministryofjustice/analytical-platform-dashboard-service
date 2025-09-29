@@ -120,4 +120,5 @@ app:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
     runAsNonRoot: true
-    runAsUser: 1000
+    runAsUser: 10000
+    runAsGroup: 10000
