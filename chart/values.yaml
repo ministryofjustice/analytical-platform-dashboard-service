@@ -92,6 +92,8 @@ app:
           key: port
     - name: DB_NAME
       value: "dashboard_service"
+    - name: PYTHONDONTWRITEBYTECODE
+      value: "1"            # avoid writing __pycache__ in read-only code paths
   port: 8000
   # These are removed while healthcheck endpoint is worked on
   livenessProbe:
@@ -116,6 +118,6 @@ app:
       drop:
         - ALL
     allowPrivilegeEscalation: false
-    readOnlyRootFilesystem: false
+    readOnlyRootFilesystem: true
     runAsNonRoot: true
     runAsUser: 1000
