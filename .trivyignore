@@ -1,5 +1,8 @@
+# missing HEALTHCHECK in Dockerfile - healthcheck is handled downstream
 AVD-DS-0026
+# false positive - flag is used correctly, but Trivy can’t see it due to the heredoc block format
 AVD-DS-0017
+# false positive - flag is used correctly, but Trivy can’t see it due to the heredoc block format
 AVD-DS-0029
 # ghcr is a trusted registry in the org
 AVD-KSV-0125
