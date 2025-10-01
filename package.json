@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "5.2.1",
+    "@ministryofjustice/frontend": "6.0.0",
     "amazon-quicksight-embedding-sdk": "2.10.1",
     "govuk-frontend": "5.12.0"
   },
