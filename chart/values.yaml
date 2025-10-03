@@ -122,3 +122,9 @@ app:
     runAsNonRoot: true
     runAsUser: 10001
     runAsGroup: 10001
+  volumeMounts:
+    - name: tmp
+      mountPath: /tmp
+  volumes:
+    - name: tmp
+      emptyDir: {}
