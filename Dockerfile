@@ -128,8 +128,13 @@ COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} templates ${APP_ROOT}/template
 COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} tests ${APP_ROOT}/tests
 COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} pyproject.toml ${APP_ROOT}/pyproject.toml
 
+RUN mkdir -p /app/staticfiles && chown ${CONTAINER_USER}:${CONTAINER_GROUP} /app/staticfiles
+
 USER ${CONTAINER_USER}
 WORKDIR ${APP_ROOT}
+
+# collect static using production settings, but ONLY for this command
+RUN python manage.py collectstatic --noinput --settings=dashboard_service.settings.production
 
 EXPOSE 8000
 ENTRYPOINT ["/docker-entrypoint.sh"]
