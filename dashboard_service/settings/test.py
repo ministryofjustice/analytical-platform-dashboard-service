@@ -19,3 +19,7 @@ LOGGING = {
         "console": {"class": "logging.StreamHandler"},
     },
 }
+
+STORAGES["staticfiles"] = {  # noqa
+    "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+}
