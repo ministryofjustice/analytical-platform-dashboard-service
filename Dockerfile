@@ -10,7 +10,7 @@ RUN <<EOF
 apt-get update --quiet --yes
 apt-get install --quiet --yes \
     --no-install-recommends \
-    python3.12-dev \
+    python3.13-dev \
     ca-certificates
 EOF
 
@@ -25,7 +25,7 @@ COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /usr/local/bin/uv
 ENV UV_LINK_MODE=copy \
     UV_COMPILE_BYTECODE=1 \
     UV_PYTHON_DOWNLOADS=never \
-    UV_PYTHON=/usr/bin/python3.12 \
+    UV_PYTHON=/usr/bin/python3.13 \
     UV_PROJECT_ENVIRONMENT=/app
 
 # Synchronize DEPENDENCIES without the application itself.
@@ -103,7 +103,7 @@ RUN <<EOF
 apt-get update --quiet --yes
 apt-get install --quiet --yes \
     --no-install-recommends \
-    python3.12-dev \
+    python3.13-dev \
     ca-certificates
 apt-get clean --yes
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
