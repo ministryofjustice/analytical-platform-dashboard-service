@@ -8,7 +8,7 @@ dependencies = [
     "authlib==1.6.5",
     "django==5.2.7",
     "django-extensions==4.1",
-    "django-structlog==9.1.1",
+    "django-structlog==10.0.0",
     "gunicorn==23.0.0",
     "psycopg[binary]==3.2.11",
     "pytest-django>=4.11.1",
