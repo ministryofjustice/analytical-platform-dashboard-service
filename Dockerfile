@@ -40,7 +40,7 @@ RUN --mount=type=cache,target=/root/.cache \
 
 ##### BUILD NODE
 
-FROM public.ecr.aws/docker/library/node:24.9.0 AS build-node
+FROM public.ecr.aws/docker/library/node:25.1.0 AS build-node
 
 WORKDIR /build
 
