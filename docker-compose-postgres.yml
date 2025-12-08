@@ -3,7 +3,7 @@ version: "3.8"
 
 services:
   postgres:
-    image: public.ecr.aws/docker/library/postgres:15.4
+    image: ghcr.io/library/postgres:15.4
     restart: always
     environment:
       POSTGRES_USER: dashboard_service
