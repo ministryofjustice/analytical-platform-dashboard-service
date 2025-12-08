@@ -21,7 +21,7 @@ jobs:
       # VALIDATE_KUBERNETES_KUBECONFORM is set to false as it cannot process Helm charts
       super-linter-variables: |
         {
-          "PYTHON_RUFF_FORMAT_CONFIG_FILE": "pyproject.toml",
+          "PYTHON_RUFF_CONFIG_FILE": "pyproject.toml",
           "VALIDATE_CHECKOV": false,
           "VALIDATE_DOCKERFILE_HADOLINT": false,
           "VALIDATE_HTML": false,
