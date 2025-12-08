@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@ministryofjustice/frontend": "6.0.0",
-    "amazon-quicksight-embedding-sdk": "2.10.2",
+    "amazon-quicksight-embedding-sdk": "2.11.0",
     "govuk-frontend": "5.13.0"
   },
   "devDependencies": {
