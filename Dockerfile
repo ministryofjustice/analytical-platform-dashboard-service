@@ -103,7 +103,7 @@ RUN <<EOF
 apt-get update --quiet --yes
 apt-get install --quiet --yes \
     --no-install-recommends \
-    python3.12-dev \
+    python3.12 \
     ca-certificates
 apt-get clean --yes
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
