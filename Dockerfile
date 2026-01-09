@@ -8,7 +8,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN <<EOF
 apt-get update --quiet --yes
-
 apt-get upgrade --quiet --yes
 apt-get install --quiet --yes \
     --no-install-recommends \
@@ -103,7 +102,6 @@ STOPSIGNAL SIGINT
 RUN <<EOF
 #!/usr/bin/env bash
 apt-get update --quiet --yes
-
 apt-get upgrade --quiet --yes
 apt-get install --quiet --yes \
     --no-install-recommends \
