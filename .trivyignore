@@ -6,5 +6,3 @@ AVD-DS-0017
 AVD-DS-0029
 # ghcr is a trusted registry in the org
 AVD-KSV-0125
-# CVE-2025-68973 - gpgv (ubuntu dependency)
-CVE-2025-68973
