@@ -9,7 +9,7 @@
   "dependencies": {
     "@ministryofjustice/frontend": "8.0.0",
     "amazon-quicksight-embedding-sdk": "2.11.1",
-    "govuk-frontend": "5.13.0"
+    "govuk-frontend": "5.14.0"
   },
   "devDependencies": {
     "prettier": "3.8.0",
