@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "prettier": "3.8.0",
-    "sass": "1.97.1"
+    "sass": "1.97.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
