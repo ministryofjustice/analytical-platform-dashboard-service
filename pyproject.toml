@@ -9,7 +9,7 @@ dependencies = [
     "django==5.2.9",
     "django-extensions==4.1",
     "django-structlog==10.0.0",
-    "gunicorn==23.0.0",
+    "gunicorn==24.0.0",
     "psycopg[binary]==3.3.2",
     "pytest-django==4.11.1",
     "python-dotenv==1.2.1",
