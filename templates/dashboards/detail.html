@@ -2,7 +2,7 @@
 
 {% block body_attributes %}onload="embedDashboard()"{% endblock body_attributes %}
 
-{% block title %}Analytical Platform Dashboard Service{% endblock title %}
+{% block title %}{{ dashboard.name }} | {{ block.super }}{% endblock title %}
 
 {% block base_div_class %}govuk-grid-column-full{% endblock base_div_class %}
 
