@@ -70,6 +70,12 @@
         },
     }
     await embeddingContext.embedDashboard(frameOptions, contentOptions);
+
+    // Set accessible name on the SDK-generated iframe
+    const iframe = container.querySelector('iframe');
+    if (iframe) {
+        iframe.title = "{{ dashboard.name }} dashboard";
+    }
 })();
 </script>
 
