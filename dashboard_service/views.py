@@ -98,3 +98,11 @@ def debug_500(request):
     Example 500 view for the dashboard service.
     """
     return render(request, "500.html", status=500)
+
+
+@login_not_required
+def accessibility(request):
+    """
+    Accessibility statement view for the dashboard service.
+    """
+    return render(request, "accessibility.html")

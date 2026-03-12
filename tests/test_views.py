@@ -110,6 +110,14 @@ def test_logout_redirects_to_auth0(mock_logout, mock_urlencode, rf):
     )
 
 
+def test_accessibility_statement_200(client):
+    url = reverse("accessibility")
+    response = client.get(url)
+
+    assert response.status_code == 200
+    assert "accessibility.html" in [t.name for t in response.templates]
+
+
 class TestLoginFailView:
     def test_renders_template(self, client):
         url = reverse("login-fail")

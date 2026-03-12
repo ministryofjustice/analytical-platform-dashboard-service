@@ -30,6 +30,7 @@ urlpatterns = [
     path("callback/", views.callback, name="callback"),
     path("dashboards/", include("dashboard_service.dashboards.urls", namespace="dashboards")),
     path("healthcheck/", views.healthcheck, name="healthcheck"),
+    path("accessibility/", views.accessibility, name="accessibility"),
 ]
 
 
