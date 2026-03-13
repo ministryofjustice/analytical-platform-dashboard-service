@@ -1,0 +1,52 @@
+{% extends "base/base.html" %}
+
+{% block title %}Accessibility statement | {{ block.super }}{% endblock title %}
+
+{% block content %}
+<div class="govuk-grid-row">
+   <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">View MOJ dashboards: accessibility statement </h1>
+
+    <h2 class="govuk-heading-l">Accessibility statement</h2>
+    <p class="govuk-body">Ministry of Justice is committed to making our websites accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.</p>
+    <p class="govuk-body">This accessibility statement applies to <a href="https://dashboards.analytical-platform.service.justice.gov.uk/" class="govuk-link" >MOJ dashboards</a>.</p>
+
+    <h2 class="govuk-heading-l">Compliance status</h2>
+    <p class="govuk-body">This website is partially compliant with the Web Content Accessibility Guidelines version 2.2 AA standard, due to the non-compliances listed below.</p>
+
+    <h2 class="govuk-heading-l">Non-compliance with the accessibility regulations</h2>
+    <p class="govuk-body">The following content on View MOJ dashboards is not compliant with the WCAG version 2.1 AA standard. These issues relate to dashboard components managed by Amazon Web Services (AWS).</p>
+
+    <h2 class="govuk-heading-l">Level A failures</h2>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>When navigating tables with a screen reader, values are read without row headers. This means screen reader users may not know the context of a value. (WCAG success criterion 1.3.1)</li>
+      <li>When sorting data in a table, the action is not announced to a screen reader user. This means screen reader users may not know when they have sorted table data. (WCAG success criterion 1.3.1)</li>
+    </ul>
+
+    <h2 class="govuk-heading-l">Level AA failures</h2>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Some dashboard text elements use poor contrast with their backgrounds. This means people with moderately poor vision may not perceive some text elements. (WCAG success criterion 1.4.3)</li>
+      <li>The menu option may not be visible on some dashboards when using browser zoom at 250%. (WCAG success criterion 1.4.10)</li>
+      <li>Using tab to navigate through a modal may lead users to a hidden element. Keyboard-only users may get lost on the page and confused as to where they are. (WCAG success criterion 2.4.7)</li>
+      <li>When tabbing through table headings, focus does not follow. Keyboard-only users will not be able to view the headings. (WCAG success criterion 2.4.11)</li>
+      <li>When a CSV file is exported, repeated status messages appear and block the drop-down filters. Keyboard-only users must take several extra steps to close these messages. Because the filters are blocked, most users cannot access them. (WCAG success criterion 2.4.11)</li>
+      <li>When users remove items from a chart, a screen reader announces the chart has changed but does not say what was removed. Focus then moves to the next item in the list. This means screen reader users are not informed about what they have just removed. (WCAG success criterion 4.1.3)</li>
+      <li>When searching in a dashboard's filter dropdowns, there is no status message to advise when there are no matching results. Some users may not understand that no results have been found. (WCAG success criterion 4.1.3)</li>
+    </ul>
+    <p class="govuk-body">We aim to make this service fully accessible. These issues have been reported to AWS, and we will continue to report any dashboard accessibility issues we discover.</p>
+
+    <h2 class="govuk-heading-l">Reporting accessibility problems</h2>
+    <p class="govuk-body">If you find any problems, or think there are further accessibility requirements we're not meeting, you can get in touch at <a href="mailto:analytical-platform@justice.gov.uk" class="govuk-link">analytical-platform@justice.gov.uk</a>.</p>
+
+    <h2 class="govuk-heading-l">If you're not happy with our response</h2>
+    <p class="govuk-body">The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the 'accessibility regulations').</p>
+    <p class="govuk-body">If you are not happy with how we respond to your complaint, contact the <a href="https://www.equalityadvisoryservice.com/" class="govuk-link">Equality Advisory and Support Service</a>, which is run on behalf of EHRC.</p>
+
+    <h2 class="govuk-heading-l">Preparation of this accessibility statement </h2>
+    <p class="govuk-body">This statement was prepared on 3 March 2026.</p>
+    <p class="govuk-body">View MOJ dashboards was assessed by the MOJ Digital Accessibility Team, who produced a report on 30 January 2026.</p>
+  </div>
+</div>
+
+{% endblock %}
