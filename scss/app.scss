@@ -1,7 +1,10 @@
-$govuk-assets-path: "/static/assets/";
+@use "node_modules/govuk-frontend/dist/govuk" as * with (
+  $govuk-assets-path: "/static/assets/"
+);
 
-/* stylelint-disable import-notation */
-@import "node_modules/govuk-frontend/dist/govuk/index";
-@import "node_modules/@ministryofjustice/frontend/moj/all";
+// Share config with MOJ Frontend
+@forward "node_modules/@ministryofjustice/frontend/moj/all" with (
+  $moj-assets-path: $govuk-assets-path
+);
 
-/* stylelint-enable */
+@use "node_modules/@x-govuk/govuk-prototype-components/src/x-govuk";

@@ -27,6 +27,8 @@
 
   {% include 'base/header.html' %}
 
+  {% block masthead %}{% endblock masthead %}
+
   {% block main %}
   <div class="{% block base_div_class %}govuk-width-container app-width-container{% endblock base_div_class %}">
     <main class="govuk-main-wrapper" id="main-content" role="main">
