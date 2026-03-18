@@ -16,6 +16,18 @@
 {% endblock masthead %}
 
 {% block content %}
+
+<nav class="moj-sub-navigation" aria-label="Sub navigation">
+  <ul class="moj-sub-navigation__list">
+    <li class="moj-sub-navigation__item">
+      <a class="moj-sub-navigation__link" {% if not request.GET.shared_via %}aria-current="page"{% endif %} href="{% url "dashboards:index" %}">Shared with you ({{ viewer_dashboards_count }})</a>
+    </li>
+    <li class="moj-sub-navigation__item">
+      <a class="moj-sub-navigation__link" {% if request.GET.shared_via == "domain" %}aria-current="page"{% endif %} href="{% url "dashboards:index" %}?shared_via=domain">Shared with {{ email_domain }} ({{ domain_dashboards_count }})</a>
+    </li>
+  </ul>
+</nav>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
 
