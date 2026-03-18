@@ -16,7 +16,7 @@ class IndexView(TemplateView):
 
     template_name = "dashboards/index.html"
 
-    def build_pagination_data(self, api_response, context):
+    def build_pagination_data(self, api_response):
         dashboard_url = reverse("dashboards:index")
         if not api_response["next"] and not api_response["previous"]:
             return None
@@ -52,45 +52,42 @@ class IndexView(TemplateView):
             pagination_data["previous"] = (
                 f"{dashboard_url}?page={api_response['current_page'] - 1}{shared_via_param}"
             )
-        context["pagination"] = pagination_data
+        return pagination_data
+
+    def get_api_response(self, shared_via=None, page=1):
+        shared_via_mapping = {
+            "direct": ["viewer", "admin"],
+            "domain": ["domain"],
+        }
+        page = int(page) if page else 1
+        response = api_client.make_request(
+            "dashboards",
+            params={
+                "email": self.request.user.email,
+                "shared_via": shared_via_mapping.get(shared_via),
+                "page": page,
+                "page_size": 10,
+            },
+        )
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        shared_via = self.request.GET.get("shared_via")
+        shared_via = self.request.GET.get("shared_via", "direct")
+        other = "domain" if shared_via == "direct" else "direct"
         page = self.request.GET.get("page", 1)
-        viewer_response = api_client.make_request(
-            "dashboards",
-            params={
-                "email": self.request.user.email,
-                "shared_via": ["viewer", "admin"],
-                "page": page if shared_via != "domain" else 1,
-                "page_size": 10,
-            },
-        )
-        domain_response = api_client.make_request(
-            "dashboards",
-            params={
-                "email": self.request.user.email,
-                "shared_via": ["domain"],
-                "page": page if shared_via == "domain" else 1,
-                "page_size": 10,
-            },
-        )
-
-        if shared_via == "domain":
-            context["dashboards"] = domain_response["results"]
-            self.build_pagination_data(domain_response, context)
-        else:
-            context["dashboards"] = viewer_response["results"]
-            self.build_pagination_data(viewer_response, context)
-
-        context["viewer_dashboards_count"] = viewer_response["count"]
-        context["domain_dashboards_count"] = domain_response["count"]
         email_domain = self.request.user.email.split("@")[-1]
+
+        active = self.get_api_response(shared_via=shared_via, page=page)
+        inactive = self.get_api_response(shared_via=other, page=1)
+
+        context["dashboards"] = active["results"]
+        context["pagination"] = self.build_pagination_data(active)
+        context[f"{shared_via}_dashboards_count"] = active["count"]
+        context[f"{other}_dashboards_count"] = inactive["count"]
         context["email_domain"] = email_domain
         logger.info("dashboard_list_retrieved")
-
         return context
 
 
