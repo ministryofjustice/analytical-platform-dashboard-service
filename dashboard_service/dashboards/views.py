@@ -87,6 +87,7 @@ class IndexView(TemplateView):
         context[f"{shared_via}_dashboards_count"] = active["count"]
         context[f"{other}_dashboards_count"] = inactive["count"]
         context["email_domain"] = email_domain
+        context["domain_active"] = shared_via == "domain"
         logger.info("dashboard_list_retrieved")
         return context
 
