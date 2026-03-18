@@ -16,54 +16,67 @@ class IndexView(TemplateView):
 
     template_name = "dashboards/index.html"
 
-    def build_pagination_data(self, api_response, context):
+    def build_pagination_data(self, api_response, context, prefix=None):
         dashboard_url = reverse("dashboards:index")
-        if api_response["next"] or api_response["previous"]:
-            page_data = [
-                {
-                    "number": page_number,
-                    "url": f"{dashboard_url}?page={page_number}"
-                    if isinstance(page_number, int)
-                    else None,
-                    "is_elipsis": not isinstance(page_number, int),
-                }
-                for page_number in api_response["page_numbers"]
-            ]
+        if not api_response["next"] and not api_response["previous"]:
+            return None
 
-            pagination_data = {
-                "next": None,
-                "previous": None,
-                "current_page": api_response["current_page"],
-                "page_data": page_data,
-                "count": api_response["count"],
+        page_param = f"{prefix}_page" if prefix else "page"
+
+        page_data = [
+            {
+                "number": page_number,
+                "url": f"{dashboard_url}?{page_param}={page_number}"
+                if isinstance(page_number, int)
+                else None,
+                "is_elipsis": not isinstance(page_number, int),
             }
+            for page_number in api_response["page_numbers"]
+        ]
 
-            if api_response["next"]:
-                pagination_data["next"] = (
-                    f"{dashboard_url}?page={api_response['current_page'] + 1}"
-                )
+        pagination_data = {
+            "next": None,
+            "previous": None,
+            "current_page": api_response["current_page"],
+            "page_data": page_data,
+            "count": api_response["count"],
+        }
 
-            if api_response["previous"]:
-                pagination_data["previous"] = (
-                    f"{dashboard_url}?page={api_response['current_page'] - 1}"
-                )
+        if api_response["next"]:
+            pagination_data["next"] = (
+                f"{dashboard_url}?{page_param}={api_response['current_page'] + 1}"
+            )
 
-            context["pagination"] = pagination_data
+        if api_response["previous"]:
+            pagination_data["previous"] = (
+                f"{dashboard_url}?{page_param}={api_response['current_page'] - 1}"
+            )
+        context_key = f"{prefix}_pagination" if prefix else "pagination"
+        context[context_key] = pagination_data
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        page = self.request.GET.get("page", None)
-        params = {
-            "email": self.request.user.email,
-        }
-
-        if page is not None:
-            params["page"] = page
-
-        response = api_client.make_request("dashboards", params=params)
-        context["dashboards"] = response["results"]
-        self.build_pagination_data(response, context)
+        viewer_response = api_client.make_request(
+            "dashboards",
+            params={
+                "email": self.request.user.email,
+                "shared_via": ["viewer", "admin"],
+                "page": self.request.GET.get("viewer_page", 1),
+            },
+        )
+        domain_response = api_client.make_request(
+            "dashboards",
+            params={
+                "email": self.request.user.email,
+                "shared_via": ["domain"],
+                "page": self.request.GET.get("domain_page", 1),
+            },
+        )
+        context["viewer_dashboards"] = viewer_response["results"]
+        context["domain_dashboards"] = domain_response["results"]
+        self.build_pagination_data(viewer_response, context, prefix="viewer")
+        self.build_pagination_data(domain_response, context, prefix="domain")
         logger.info("dashboard_list_retrieved")
 
         return context
