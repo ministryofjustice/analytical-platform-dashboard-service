@@ -2,16 +2,28 @@
 
 {% block title %}{{ dashboard.name }} | {{ block.super }}{% endblock title %}
 
-{% block base_div_class %}govuk-grid-column-full{% endblock base_div_class %}
+{% block base_div_class %}govuk-width-container app-width-container--full{% endblock base_div_class %}
+
+{% block back_link %}
+  <a href="{% url "dashboards:index" %}" class="govuk-back-link">All dashboards</a>
+{% endblock back_link %}
 
 {% block content %}
 
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l">{{ dashboard.name }}</h1>
-    <div id="dashboard-container"></div>
+<div class="app-full-bleed-background govuk-!-padding-top-6">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-xl">{{ dashboard.name }}</h1>
+      <p class="govuk-body">{{ dashboard.description }}</p>
+      <p class="govuk-body">Shared by update-me@email.com</p>
+    </div>
   </div>
 </div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div id="dashboard-container"></div>
+  </div>
 
 {% endblock content %}
 

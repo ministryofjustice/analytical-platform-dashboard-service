@@ -53,7 +53,7 @@
           {% for dashboard in dashboards %}
             <tr class="govuk-table__row">
               <th scope="row" class="govuk-table__header">{{ dashboard.name }}</th>
-              <td class="govuk-table__cell">{{ dashboard.description }}</td>
+              <td class="govuk-table__cell">{{ dashboard.description|truncatewords:69 }}</td>
               <td class="govuk-table__cell"><a href="{% url "dashboards:detail" quicksight_id=dashboard.quicksight_id %}">View dashboard</a></td>
             </tr>
           {% endfor %}

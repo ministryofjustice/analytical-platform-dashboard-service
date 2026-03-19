@@ -31,6 +31,7 @@
 
   {% block main %}
   <div class="{% block base_div_class %}govuk-width-container app-width-container{% endblock base_div_class %}">
+    {% block back_link %}{% endblock back_link %}
     <main class="govuk-main-wrapper" id="main-content" role="main">
       {% block content %}
       {% endblock content %}
