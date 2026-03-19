@@ -8,3 +8,17 @@
 );
 
 @use "node_modules/@x-govuk/govuk-prototype-components/src/x-govuk";
+
+.app-width-container--full {
+  max-width: none;
+  padding: 0 govuk-spacing(6);
+}
+
+.app-full-bleed-background {
+  background-color: govuk-colour("black", $variant: "tint-95");
+  margin-left: govuk-spacing(-6);
+  margin-right: govuk-spacing(-6);
+  padding-left: govuk-spacing(6);
+  padding-right: govuk-spacing(6);
+  padding-bottom: govuk-spacing(4);
+}
