@@ -2,6 +2,7 @@ import requests
 import structlog
 from django.http import Http404
 from django.urls import reverse
+from django.utils.dateparse import parse_datetime
 from django.views.generic import TemplateView
 
 from dashboard_service.dashboards.api import api_client
@@ -109,9 +110,7 @@ class DetailView(TemplateView):
                 raise Http404("Dashboard not found") from e
             raise e
         context["dashboard"] = dashboard_data
-        context["dashboard_admins"] = ", ".join(
-            [admin["email"] for admin in dashboard_data["admins"]]
-        )
+        context["shared_on_datetime"] = parse_datetime(dashboard_data.get("shared_on", ""))
         return context
 
     def render_to_response(self, context, **response_kwargs):
