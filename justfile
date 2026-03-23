@@ -42,6 +42,7 @@ build-js:
     mkdir -p static/assets/js
     cp node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js static/assets/js/govuk-frontend.min.js
     cp node_modules/@x-govuk/govuk-prototype-components/dist/govuk-prototype-components.min.js static/assets/js/govuk-prototype-components.min.js
+    cp node_modules/@x-govuk/govuk-prototype-components/dist/govuk-prototype-components.min.js.map static/assets/js/govuk-prototype-components.min.js.map
 
 build-static:
     rm -rf static/
