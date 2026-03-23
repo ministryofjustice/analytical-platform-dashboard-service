@@ -1,12 +1,10 @@
 @use "node_modules/govuk-frontend/dist/govuk" as * with (
   $govuk-assets-path: "/static/assets/"
 );
-
 // Share config with MOJ Frontend
 @forward "node_modules/@ministryofjustice/frontend/moj/all" with (
   $moj-assets-path: $govuk-assets-path
 );
-
 @use "node_modules/@x-govuk/govuk-prototype-components/src/x-govuk";
 
 .app-width-container--full {
