@@ -301,7 +301,7 @@ class TestDetailView:
         yield view_obj
 
     @pytest.mark.django_db
-    def test_login_required(self, client, user):
+    def test_login_required(self, client, user, api_client):
         url = reverse("dashboards:detail", kwargs={"quicksight_id": "test_id"})
         response = client.get(url)
 
@@ -310,7 +310,9 @@ class TestDetailView:
 
         user.save()
         client.force_login(user)
-        response = client.get(url)
+        with patch.object(api_client, "make_request", return_value={}):
+            response = client.get(url)
+
         assert response.status_code == 200
         assert "dashboards/detail.html" in response.template_name
 
@@ -318,6 +320,7 @@ class TestDetailView:
         view_obj.request.user = user
 
         with patch.object(api_client, "make_request") as mock_make_request:
+            mock_make_request.return_value = {}
             context = view_obj.get_context_data()
 
         assert "dashboard" in context
