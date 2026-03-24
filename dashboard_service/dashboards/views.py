@@ -3,6 +3,7 @@ import structlog
 from django.http import Http404
 from django.urls import reverse
 from django.utils.dateparse import parse_datetime
+from django.utils.http import urlencode
 from django.views.generic import TemplateView
 
 from dashboard_service.dashboards.api import api_client
@@ -22,13 +23,17 @@ class IndexView(TemplateView):
         if not api_response["next"] and not api_response["previous"]:
             return None
 
-        shared_via = self.request.GET.get("shared_via", None)
-        shared_via_param = f"&shared_via={shared_via}" if shared_via else ""
+        query_params = {
+            "email": self.request.user.email,
+            "shared_via": self.request.GET.get("shared_via"),
+            "page_size": self.request.GET.get("page_size"),
+        }
+        query_string = urlencode({k: v for k, v in query_params.items() if v})
 
         page_data = [
             {
                 "number": page_number,
-                "url": f"{dashboard_url}?page={page_number}{shared_via_param}"
+                "url": f"{dashboard_url}?page={page_number}&{query_string}"
                 if isinstance(page_number, int)
                 else None,
                 "is_elipsis": not isinstance(page_number, int),
@@ -46,12 +51,12 @@ class IndexView(TemplateView):
 
         if api_response["next"]:
             pagination_data["next"] = (
-                f"{dashboard_url}?page={api_response['current_page'] + 1}{shared_via_param}"
+                f"{dashboard_url}?page={api_response['current_page'] + 1}&{query_string}"
             )
 
         if api_response["previous"]:
             pagination_data["previous"] = (
-                f"{dashboard_url}?page={api_response['current_page'] - 1}{shared_via_param}"
+                f"{dashboard_url}?page={api_response['current_page'] - 1}&{query_string}"
             )
         return pagination_data
 
@@ -67,7 +72,7 @@ class IndexView(TemplateView):
                 "email": self.request.user.email,
                 "shared_via": shared_via_mapping.get(shared_via),
                 "page": page,
-                "page_size": 10,
+                "page_size": self.request.GET.get("page_size", 10),
             },
         )
         return response
@@ -110,7 +115,7 @@ class DetailView(TemplateView):
                 raise Http404("Dashboard not found") from e
             raise e
         context["dashboard"] = dashboard_data
-        context["shared_on_datetime"] = parse_datetime(dashboard_data.get("shared_on", ""))
+        context["shared_on_datetime"] = parse_datetime(dashboard_data.get("shared_on") or "")
         return context
 
     def render_to_response(self, context, **response_kwargs):
