@@ -51,8 +51,8 @@ build-static:
 
 # Lint and format with ruff
 lint:
-    ruff check --fix
     ruff format
+    ruff check --fix
 
 # Check for migration changes
 makemigrations *ARGS:

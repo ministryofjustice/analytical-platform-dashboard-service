@@ -149,6 +149,7 @@ class TestIndexView:
         assert context["dashboards"] == domain_response["results"]
         assert context["domain_dashboards_count"] == 5
         assert context["direct_dashboards_count"] == 1
+        assert context["domain_active"] is True
 
     def test_get_context_data_page_forwarded_to_active_tab(self, api_client, rf, user):
         """Test that page param is forwarded to the active tab only"""
@@ -238,6 +239,7 @@ class TestIndexView:
         assert context["direct_dashboards_count"] == 7
         assert context["domain_dashboards_count"] == 7
         assert context["email_domain"] == "example.com"
+        assert context["domain_active"] is False
 
     def test_build_pagination_data_includes_shared_via_in_urls(self, api_client, rf, user):
         """Test that pagination URLs include shared_via param when on domain tab"""
@@ -320,15 +322,24 @@ class TestDetailView:
         view_obj.request.user = user
 
         with patch.object(api_client, "make_request") as mock_make_request:
-            mock_make_request.return_value = {}
+            mock_data = {
+                "name": "test-dashboard",
+                "quicksight_id": "123456789",
+                "shared_on": "2026-04-16T10:30:00Z",
+                "shared_by_name": "Bob Smith",
+                "shared_by_email": "bob.smith@example.com",
+            }
+            mock_make_request.return_value = mock_data
             context = view_obj.get_context_data()
 
-        assert "dashboard" in context
         mock_make_request.assert_called_once_with(
             f"dashboards/{view_obj.kwargs['quicksight_id']}",
             params={"email": user.email},
             timeout=5,
         )
+        assert "dashboard" in context
+        assert "shared_on_datetime" in context
+        assert context["dashboard"] == mock_data
 
     def test_404_raised(self, api_client, view_obj, user):
         view_obj.request.user = user
@@ -351,6 +362,26 @@ class TestDetailView:
 
             with pytest.raises(requests.exceptions.HTTPError):
                 view_obj.get_context_data()
+
+    def test_get_context_data_shared_on_parsed(self, api_client, view_obj, user):
+        view_obj.request.user = user
+
+        with patch.object(
+            api_client, "make_request", return_value={"shared_on": "2026-04-16T10:30:00Z"}
+        ):
+            context = view_obj.get_context_data()
+
+        assert context["shared_on_datetime"].year == 2026
+        assert context["shared_on_datetime"].month == 4
+        assert context["shared_on_datetime"].day == 16
+
+    def test_get_context_data_shared_on_none(self, api_client, view_obj, user):
+        view_obj.request.user = user
+
+        with patch.object(api_client, "make_request", return_value={}):
+            context = view_obj.get_context_data()
+
+        assert context["shared_on_datetime"] is None
 
     def test_render_to_response(self, api_client, view_obj, user, caplog):
         caplog.set_level("INFO", logger="dashboard_service")
