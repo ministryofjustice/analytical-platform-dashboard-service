@@ -25,6 +25,10 @@ updates:
       interval: "daily"
     cooldown:
       default-days: 7
+    groups:
+      analytical-platform-github-actions:
+        patterns:
+          - "ministryofjustice/analytical-platform-github-actions*"
   - package-ecosystem: "uv"
     directory: "/"
     schedule:
