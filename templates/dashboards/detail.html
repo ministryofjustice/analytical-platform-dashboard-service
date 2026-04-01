@@ -2,18 +2,34 @@
 
 {% block title %}{{ dashboard.name }} | {{ block.super }}{% endblock title %}
 
-{% block base_div_class %}govuk-grid-column-full{% endblock base_div_class %}
-
-{% block content %}
-
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l">{{ dashboard.name }}</h1>
-    <div id="dashboard-container"></div>
+{% block main %}
+<div class="govuk-width-container app-width-container--full">
+  <a href="{% url "dashboards:index" %}" class="govuk-back-link">All dashboards</a>
+</div>
+<div class="app-dashboard-detail-header">
+  <div class="govuk-width-container app-width-container--full">
+    <div class="govuk-!-padding-top-6 govuk-!-padding-bottom-4">
+      <h1 class="govuk-heading-xl">{{ dashboard.name }}</h1>
+      <p class="govuk-body">{{ dashboard.description }}</p>
+      {% if dashboard.shared_by_name %}
+        <p class="govuk-body"><span class="govuk-!-font-weight-bold">Shared by:</span> {{ dashboard.shared_by_name }}{% if dashboard.shared_by_email %} (<a class="govuk-link" href="mailto:{{ dashboard.shared_by_email }}">{{ dashboard.shared_by_email }}</a>){% endif %}</p>
+      {% endif %}
+      {% if dashboard.shared_on %}
+        <p class="govuk-body-s">Shared on {{ shared_on_datetime|date:"j F Y" }}</p>
+      {% endif %}
+    </div>
   </div>
 </div>
-
-{% endblock content %}
+<div class="govuk-width-container app-width-container--full">
+  <main class="govuk-main-wrapper" id="main-content" role="main">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div id="dashboard-container"></div>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock main %}
 
 {% block scripts %}
     <script src="https://unpkg.com/amazon-quicksight-embedding-sdk@2.11.2/dist/quicksight-embedding-js-sdk.min.js"></script>

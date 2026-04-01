@@ -8,12 +8,15 @@
   },
   "dependencies": {
     "@ministryofjustice/frontend": "9.0.0",
+    "@x-govuk/govuk-prototype-components": "6.0.0",
     "amazon-quicksight-embedding-sdk": "2.11.2",
     "govuk-frontend": "6.1.0"
   },
   "devDependencies": {
     "prettier": "3.8.1",
-    "sass": "1.98.0"
+    "sass": "1.98.0",
+    "stylelint": "17.5.0",
+    "stylelint-config-standard-scss": "17.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
