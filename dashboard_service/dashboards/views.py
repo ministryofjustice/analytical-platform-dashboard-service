@@ -2,6 +2,8 @@ import requests
 import structlog
 from django.http import Http404
 from django.urls import reverse
+from django.utils.dateparse import parse_datetime
+from django.utils.http import urlencode
 from django.views.generic import TemplateView
 
 from dashboard_service.dashboards.api import api_client
@@ -16,56 +18,83 @@ class IndexView(TemplateView):
 
     template_name = "dashboards/index.html"
 
-    def build_pagination_data(self, api_response, context):
+    def build_pagination_data(self, api_response):
         dashboard_url = reverse("dashboards:index")
-        if api_response["next"] or api_response["previous"]:
-            page_data = [
-                {
-                    "number": page_number,
-                    "url": f"{dashboard_url}?page={page_number}"
-                    if isinstance(page_number, int)
-                    else None,
-                    "is_elipsis": not isinstance(page_number, int),
-                }
-                for page_number in api_response["page_numbers"]
-            ]
+        if not api_response["next"] and not api_response["previous"]:
+            return None
 
-            pagination_data = {
-                "next": None,
-                "previous": None,
-                "current_page": api_response["current_page"],
-                "page_data": page_data,
-                "count": api_response["count"],
+        query_params = {
+            "email": self.request.user.email,
+            "shared_via": self.request.GET.get("shared_via"),
+            "page_size": self.request.GET.get("page_size"),
+        }
+        query_string = urlencode({k: v for k, v in query_params.items() if v})
+
+        page_data = [
+            {
+                "number": page_number,
+                "url": f"{dashboard_url}?page={page_number}&{query_string}"
+                if isinstance(page_number, int)
+                else None,
+                "is_elipsis": not isinstance(page_number, int),
             }
+            for page_number in api_response["page_numbers"]
+        ]
 
-            if api_response["next"]:
-                pagination_data["next"] = (
-                    f"{dashboard_url}?page={api_response['current_page'] + 1}"
-                )
+        pagination_data = {
+            "next": None,
+            "previous": None,
+            "current_page": api_response["current_page"],
+            "page_data": page_data,
+            "count": api_response["count"],
+        }
 
-            if api_response["previous"]:
-                pagination_data["previous"] = (
-                    f"{dashboard_url}?page={api_response['current_page'] - 1}"
-                )
+        if api_response["next"]:
+            pagination_data["next"] = (
+                f"{dashboard_url}?page={api_response['current_page'] + 1}&{query_string}"
+            )
 
-            context["pagination"] = pagination_data
+        if api_response["previous"]:
+            pagination_data["previous"] = (
+                f"{dashboard_url}?page={api_response['current_page'] - 1}&{query_string}"
+            )
+        return pagination_data
+
+    def get_api_response(self, shared_via=None, page=1):
+        shared_via_mapping = {
+            "direct": ["viewer", "admin"],
+            "domain": ["domain"],
+        }
+        page = int(page) if page else 1
+        response = api_client.make_request(
+            "dashboards",
+            params={
+                "email": self.request.user.email,
+                "shared_via": shared_via_mapping.get(shared_via),
+                "page": page,
+                "page_size": self.request.GET.get("page_size", 10),
+            },
+        )
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        page = self.request.GET.get("page", None)
-        params = {
-            "email": self.request.user.email,
-        }
+        shared_via = self.request.GET.get("shared_via", "direct")
+        other = "domain" if shared_via == "direct" else "direct"
+        page = self.request.GET.get("page", 1)
+        email_domain = self.request.user.email.split("@")[-1]
 
-        if page is not None:
-            params["page"] = page
+        active = self.get_api_response(shared_via=shared_via, page=page)
+        inactive = self.get_api_response(shared_via=other, page=1)
 
-        response = api_client.make_request("dashboards", params=params)
-        context["dashboards"] = response["results"]
-        self.build_pagination_data(response, context)
+        context["dashboards"] = active["results"]
+        context["pagination"] = self.build_pagination_data(active)
+        context[f"{shared_via}_dashboards_count"] = active["count"]
+        context[f"{other}_dashboards_count"] = inactive["count"]
+        context["email_domain"] = email_domain
+        context["domain_active"] = shared_via == "domain"
         logger.info("dashboard_list_retrieved")
-
         return context
 
 
@@ -86,9 +115,7 @@ class DetailView(TemplateView):
                 raise Http404("Dashboard not found") from e
             raise e
         context["dashboard"] = dashboard_data
-        context["dashboard_admins"] = ", ".join(
-            [admin["email"] for admin in dashboard_data["admins"]]
-        )
+        context["shared_on_datetime"] = parse_datetime(dashboard_data.get("shared_on") or "")
         return context
 
     def render_to_response(self, context, **response_kwargs):
