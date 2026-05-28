@@ -54,6 +54,29 @@ class TestIndexView:
         assert response.status_code == 200
         assert "dashboards/index.html" in [t.name for t in response.templates]
 
+    @pytest.mark.django_db
+    def test_index_renders_with_dashboards(self, client, user, api_client):
+        url = reverse("dashboards:index")
+        user.save()
+        client.force_login(user)
+
+        with patch.object(api_client, "make_request") as mock_make_request:
+            mock_make_request.return_value = {
+                "results": [
+                    {
+                        "name": "test-dashboard",
+                        "quicksight_id": "123456789",
+                        "description": "A test dashboard",
+                    }
+                ],
+                "next": None,
+                "previous": None,
+                "count": 1,
+            }
+            response = client.get(url)
+
+        assert response.status_code == 200
+
     def test_get_context_data(self, api_client, view_obj, user, caplog):
         caplog.set_level("INFO", logger="dashboard_service")
         view_obj.request.user = user
