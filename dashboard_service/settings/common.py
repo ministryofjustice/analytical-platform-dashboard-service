@@ -187,6 +187,7 @@ if os.environ.get("SENTRY_DSN"):
     # Third-party
     import sentry_sdk
     from sentry_sdk.integrations.django import DjangoIntegration
+    from sentry_sdk.integrations.logging import ignore_logger
 
     sentry_sdk.init(
         dsn=os.environ["SENTRY_DSN"],
@@ -195,6 +196,8 @@ if os.environ.get("SENTRY_DSN"):
         traces_sample_rate=0.0,
         send_default_pii=True,
     )
+
+    ignore_logger("django.request")
 
 
 # Control Panel API settings
