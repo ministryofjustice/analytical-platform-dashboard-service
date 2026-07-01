@@ -2,6 +2,8 @@
 # Grype configuration file for container vulnerability scanning
 # https://github.com/anchore/grype#configuration
 
+
+
 # trivyignore contents to be configured for grype if required
 # # missing HEALTHCHECK in Dockerfile - healthcheck is handled downstream
 # AVD-DS-0026
