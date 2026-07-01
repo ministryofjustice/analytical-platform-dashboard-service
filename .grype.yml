@@ -2,17 +2,12 @@
 # Grype configuration file for container vulnerability scanning
 # https://github.com/anchore/grype#configuration
 
+ignore:
+  - vulnerability: CVE-2026-42496
+    reason: "Archive::Tar symlink extraction vulnerability. perl-base is present but Archive::Tar module is not used in this application. Fixed in perl-base 5.38.2-3.2ubuntu0.3, waiting for upstream Ubuntu 24.04 base image update."
 
+  - vulnerability: CVE-2026-8376
+    reason: "Not exploitable: 32-bit heap buffer overflow in regex compilation. This image runs 64-bit (linux/amd64). Fixed in perl-base 5.38.2-3.2ubuntu0.3, waiting for upstream Ubuntu 24.04 base image update."
 
-# trivyignore contents to be configured for grype if required
-# # missing HEALTHCHECK in Dockerfile - healthcheck is handled downstream
-# AVD-DS-0026
-# # false positive - flag is used correctly, but Trivy can’t see it due to the heredoc block format
-# AVD-DS-0017
-# # false positive - flag is used correctly, but Trivy can’t see it due to the heredoc block format
-# AVD-DS-0029
-# # ghcr is a trusted registry in the org
-# AVD-KSV-0125
-# # Ubuntu dependency gpgv
-# CVE-2025-68973
-
+  - vulnerability: GHSA-537c-gmf6-5ccf
+    reason: "OpenSSL vulnerability in cryptography's statically linked OpenSSL (wheel distribution). Transitive dependency via authlib. Fixed in cryptography 48.0.1+. Will be resolved when authlib updates its cryptography requirement or via uv override-dependencies if required."
