@@ -13,6 +13,7 @@ jobs:
     name: Super Linter
     permissions:
       contents: read
+      pull-requests: write
       packages: read
       statuses: write
     uses: ministryofjustice/analytical-platform-github-actions/.github/workflows/reusable-super-linter.yml@bc0d450d55cc014693437d793b797b7b0e281db4 # v7.3.1
