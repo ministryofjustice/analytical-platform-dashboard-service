@@ -11,3 +11,6 @@ ignore:
 
   - vulnerability: GHSA-537c-gmf6-5ccf
     reason: "OpenSSL vulnerability in cryptography's statically linked OpenSSL (wheel distribution). Transitive dependency via authlib. Fixed in cryptography 48.0.1+. Will be resolved when authlib updates its cryptography requirement or via uv override-dependencies if required."
+
+  - vulnerability: GHSA-gg9x-qcx2-xmrh
+    reason: "A high vulnerability in python package: joserfc, version 1.6.5 was found in image"

@@ -104,6 +104,11 @@ apt-get update --quiet --yes
 apt-get install --quiet --yes \
     --no-install-recommends \
     python3.12 \
+    libncursesw6=6.4+20240113-1ubuntu2.1 \
+    libtinfo6=6.4+20240113-1ubuntu2.1 \
+    ncurses-base=6.4+20240113-1ubuntu2.1 \
+    ncurses-bin=6.4+20240113-1ubuntu2.1 \
+    gzip=1.12-1ubuntu3.2 \
     ca-certificates
 apt-get clean --yes
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
