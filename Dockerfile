@@ -104,6 +104,8 @@ apt-get update --quiet --yes
 apt-get install --quiet --yes \
     --no-install-recommends \
     python3.12 \
+    libc6=2.39-0ubuntu8.8 \
+    libc-bin=2.39-0ubuntu8.8 \
     libncursesw6=6.4+20240113-1ubuntu2.1 \
     libtinfo6=6.4+20240113-1ubuntu2.1 \
     ncurses-base=6.4+20240113-1ubuntu2.1 \
