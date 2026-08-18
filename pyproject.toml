@@ -22,7 +22,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "django-debug-toolbar==6.3.0",
-    "pre-commit==4.6.1",
+    "pre-commit==4.6.2",
     "pytest==9.0.3",
     "ruff==0.16.0",
     "sqlparse>=0.6.0",
