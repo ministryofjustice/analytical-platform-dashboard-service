@@ -106,12 +106,12 @@ apt-get install --quiet --yes \
     python3.12 \
     libc6=2.39-0ubuntu8.9 \
     libc-bin=2.39-0ubuntu8.9 \
-    libncursesw6=6.4+20240113-1ubuntu2.1 \
-    libtinfo6=6.4+20240113-1ubuntu2.1 \
-    ncurses-base=6.4+20240113-1ubuntu2.1 \
-    ncurses-bin=6.4+20240113-1ubuntu2.1 \
+    libncursesw6=6.4+20240113-1ubuntu2.2 \
+    libtinfo6=6.4+20240113-1ubuntu2.2 \
+    ncurses-base=6.4+20240113-1ubuntu2.2 \
+    ncurses-bin=6.4+20240113-1ubuntu2.2 \
     gzip=1.12-1ubuntu3.2 \
-    perl-base=5.38.2-3.2ubuntu0.4 \
+    perl-base=5.38.2-3.2ubuntu0.6 \
     libattr1=1:2.5.2-1ubuntu0.1 \
     ca-certificates
 apt-get clean --yes
