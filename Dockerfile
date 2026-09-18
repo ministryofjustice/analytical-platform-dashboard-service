@@ -104,7 +104,6 @@ apt-get update --quiet --yes
 apt-get install --quiet --yes \
     --no-install-recommends \
     python3.12 \
-    python-is-python3 \
     libc6=2.39-0ubuntu8.9 \
     libc-bin=2.39-0ubuntu8.9 \
     libncursesw6=6.4+20240113-1ubuntu2.2 \
@@ -139,6 +138,8 @@ COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} dashboard_service ${APP_ROOT}/
 COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} templates ${APP_ROOT}/templates
 COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} tests ${APP_ROOT}/tests
 COPY --chown=${CONTAINER_USER}:${CONTAINER_GROUP} pyproject.toml ${APP_ROOT}/pyproject.toml
+
+RUN ln -s /app/bin/python /usr/local/bin/python
 
 RUN mkdir -p /app/staticfiles && chown ${CONTAINER_USER}:${CONTAINER_GROUP} /app/staticfiles
 
