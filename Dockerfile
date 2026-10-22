@@ -1,3 +1,8 @@
+##### UV
+
+# Declared as a stage so Dependabot can detect and update the uv image.
+FROM ghcr.io/astral-sh/uv:0.13.5@sha256:32a7bb39b496babbd997b0a39a4d66c126bdaf5661b302bf6f06abda8deca6ff AS uv
+
 ##### BUILD PYTHON
 
 FROM docker.io/library/ubuntu:24.04@sha256:f610ab94648195aa356059f5b41d6085c9d4d903c072430cdd1af7bdb646106b AS build-python
@@ -15,7 +20,7 @@ apt-get install --quiet --yes \
 EOF
 
 # Install uv
-COPY --from=ghcr.io/astral-sh/uv:0.6.14 /uv /usr/local/bin/uv
+COPY --from=uv /uv /usr/local/bin/uv
 
 # - Silence uv complaining about not being able to use hard links,
 # - tell uv to byte-compile packages for faster application startups,
