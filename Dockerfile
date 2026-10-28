@@ -45,7 +45,7 @@ RUN --mount=type=cache,target=/root/.cache \
 
 ##### BUILD NODE
 
-FROM docker.io/library/node:26.4.0 AS build-node
+FROM docker.io/library/node:26.12.0 AS build-node
 
 WORKDIR /build
 
