@@ -11,3 +11,15 @@ ignore:
 
   - vulnerability: CVE-2026-85091
     reason: "A high vulnerability in deb package: zlib1g"
+
+  - vulnerability: CVE-2026-86145
+    reason: "deb package: libpcre2-8-0 - waiting for fix in image"
+
+  - vulnerability: CVE-2026-89157
+    reason: "deb package: libpcre2-8-0 - waiting for fix in image"
+
+  - vulnerability: CVE-2026-103111
+    reason: "deb package: libpcre2-8-0 - waiting for fix in image"
+
+  - vulnerability: CVE-2026-89161
+    reason: "deb package: libpcre2-8-0 - waiting for fix in image"
