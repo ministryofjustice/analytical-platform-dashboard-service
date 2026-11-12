@@ -5,13 +5,13 @@ description = "Dashboard Service for Analytical Platform"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "authlib>=1.9.1",
-    "cryptography>=50.0.0",
-    "django==5.2.18",
+    "authlib==1.9.4",
+    "cryptography==50.0.2",
+    "django==5.2.19",
     "django-extensions==4.1",
     "django-structlog==11.0.0",
     "gunicorn==26.2.0",
-    "psycopg[binary]==3.3.6",
+    "psycopg[binary]==3.3.8",
     "pytest-django==4.14.0",
     "python-dotenv==1.2.4",
     "requests==2.34.2",
@@ -23,10 +23,10 @@ dependencies = [
 [dependency-groups]
 dev = [
     "django-debug-toolbar==8.0.0",
-    "pre-commit==4.6.2",
+    "pre-commit==4.7.0",
     "pytest==9.2.0",
-    "ruff==0.16.10",
-    "sqlparse>=0.6.0",
+    "ruff==0.17.3",
+    "sqlparse==0.6.1",
 ]
 
 [tool.ruff]
