@@ -118,7 +118,7 @@ apt-get install --quiet --yes \
     ncurses-base=6.4+20240113-1ubuntu2.2 \
     ncurses-bin=6.4+20240113-1ubuntu2.2 \
     gzip=1.12-1ubuntu3.2 \
-    perl-base=5.38.2-3.2ubuntu0.6 \
+    perl-base=5.38.2-3.2ubuntu0.7 \
     libattr1=1:2.5.2-1ubuntu0.1 \
     ca-certificates
 apt-get clean --yes
