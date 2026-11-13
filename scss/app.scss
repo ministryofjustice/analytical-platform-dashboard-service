@@ -1,7 +1,6 @@
 @use "govuk-frontend/dist/govuk" as * with (
   $govuk-assets-path: "/static/assets/"
 );
-
 @forward "@ministryofjustice/frontend/moj/all";
 @use "@x-govuk/govuk-prototype-components/src/x-govuk";
 
