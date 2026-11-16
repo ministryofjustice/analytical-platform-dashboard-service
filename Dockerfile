@@ -111,8 +111,8 @@ apt-get install --quiet --yes \
     python3.12 \
     apt=2.8.4ubuntu0.1 \
     libapt-pkg6.0t64=2.8.4ubuntu0.1 \
-    libc6=2.39-0ubuntu8.9 \
-    libc-bin=2.39-0ubuntu8.9 \
+    libc6=2.39-0ubuntu8.12 \
+    libc-bin=2.39-0ubuntu8.12 \
     libncursesw6=6.4+20240113-1ubuntu2.2 \
     libtinfo6=6.4+20240113-1ubuntu2.2 \
     ncurses-base=6.4+20240113-1ubuntu2.2 \
