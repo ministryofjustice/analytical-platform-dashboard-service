@@ -3,15 +3,6 @@
 # https://github.com/anchore/grype#configuration
 
 ignore:
-  - vulnerability: GHSA-537c-gmf6-5ccf
-    reason: "OpenSSL vulnerability in cryptography's statically linked OpenSSL (wheel distribution). Transitive dependency via authlib. Fixed in cryptography 48.0.1+. Will be resolved when authlib updates its cryptography requirement or via uv override-dependencies if required."
-
-  - vulnerability: GHSA-gg9x-qcx2-xmrh
-    reason: "A high vulnerability in python package: joserfc, version 1.6.5 was found in image"
-
-  - vulnerability: CVE-2026-85091
-    reason: "A high vulnerability in deb package: zlib1g"
-
   - vulnerability: CVE-2026-86145
     reason: "deb package: libpcre2-8-0 - waiting for fix in image"
 
